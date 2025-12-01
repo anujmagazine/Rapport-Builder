@@ -1,0 +1,5 @@
+{
+  "name": "IntelBrief AI",
+  "description": "An expert intelligence tool that generates dynamic, action-oriented professional dossiers based on specific research goals using Gemini and Google Search.",
+  "requestFramePermissions": []
+}
