@@ -21,13 +21,17 @@ RESEARCH CONTEXT & GOAL: ${goal}
 
 CORE TASK SEQUENCE:
 
-1. Dynamic Rubric Creation: Based only on the 'RESEARCH CONTEXT & GOAL', formulate a 4-5 point thematic rubric. Each point must represent a critical area of insight required for this specific objective (e.g., if the goal is "investing in their startup," themes might be 'Market Viability,' 'Previous Exits,' and 'Reputation').
+1. Dynamic Rubric Creation: Based only on the 'RESEARCH CONTEXT & GOAL', formulate a 4-5 point thematic rubric. Each point must represent a critical area of insight required for this specific objective.
 2. Information Synthesis & Grounding: Use Google Search grounding to gather recent, verifiable information about ${name}, their company, and their professional background.
-3. Organization and Population: Organize all synthesized information exclusively under the sections defined by your dynamic rubric. Focus on strategic insights, not just biographical facts.
+3. Executive Synthesis: Distill the most vital findings into a high-level summary at the very beginning.
+4. Organization and Population: Organize all synthesized information exclusively under the sections defined by your dynamic rubric. Focus on strategic insights, not just biographical facts.
 
 MANDATORY OUTPUT STRUCTURE (Markdown):
 
 # Intelligence Dossier: ${name}
+
+## Executive Summary
+**Snapshot:** A 3-5 bullet point high-level summary of the most critical intelligence gathered. This must allow the user to grasp the essence of the person and the strategic viability of the goal immediately without reading the full report. Focus on the "So What?".
 
 ## 1. Context & Core Persona
 

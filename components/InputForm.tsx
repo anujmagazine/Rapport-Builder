@@ -27,10 +27,10 @@ export const InputForm: React.FC<InputFormProps> = ({
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
           <Search className="w-6 h-6 text-indigo-600" />
-          New Brief
+          New Research
         </h2>
         <p className="text-slate-500 mt-1">
-          Define your target and objective to generate a custom intelligence dossier.
+          Input your target subject and specific research goal to generate a comprehensive strategic profile.
         </p>
       </div>
 
@@ -97,7 +97,7 @@ export const InputForm: React.FC<InputFormProps> = ({
             />
           </div>
           <p className="text-xs text-slate-500 mt-2">
-            Be specific. The AI structures the entire dossier based on this objective.
+            Be specific. The AI structures the entire analysis based on this objective.
           </p>
         </div>
 
@@ -114,10 +114,10 @@ export const InputForm: React.FC<InputFormProps> = ({
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              Compiling Dossier...
+              Compiling Analysis...
             </>
           ) : (
-            "Generate Intelligence Dossier"
+            "Generate Strategic Profile"
           )}
         </button>
       </div>

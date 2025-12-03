@@ -3,7 +3,7 @@ import { FormState, ResearchResult } from "./types";
 import { generateResearchProfile } from "./services/geminiService";
 import { InputForm } from "./components/InputForm";
 import { ResultDisplay } from "./components/ResultDisplay";
-import { Sparkles, AlertCircle, Radar } from "lucide-react";
+import { Sparkles, AlertCircle, ScanSearch } from "lucide-react";
 
 const App: React.FC = () => {
   const [formState, setFormState] = useState<FormState>({
@@ -44,11 +44,11 @@ const App: React.FC = () => {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-indigo-600 rounded-lg">
-              <Radar className="w-6 h-6 text-white" />
+              <ScanSearch className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold tracking-tight">IntelBrief AI</h1>
-              <p className="text-xs text-slate-400 font-medium">Deep-Dive Professional Intelligence</p>
+              <h1 className="text-xl font-bold tracking-tight">Vantage Intelligence</h1>
+              <p className="text-xs text-slate-400 font-medium">Strategic Person Research</p>
             </div>
           </div>
           <div className="hidden md:block text-sm text-slate-300 bg-slate-800 py-1 px-3 rounded-full border border-slate-700">
@@ -62,7 +62,7 @@ const App: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Left Column: Input */}
-          <div className="lg:col-span-4 sticky top-28">
+          <div className="lg:col-span-4 lg:sticky lg:top-28">
             <InputForm
               formState={formState}
               setFormState={setFormState}
@@ -74,11 +74,11 @@ const App: React.FC = () => {
             <div className="mt-6 p-4 rounded-lg bg-slate-200 text-slate-600 text-sm border border-slate-300">
               <h4 className="font-semibold mb-2 flex items-center gap-2">
                 <AlertCircle className="w-4 h-4" />
-                Dossier Tips
+                Research Tips
               </h4>
               <ul className="list-disc list-inside space-y-1 opacity-80">
                 <li>Be precise with your <strong>Research Goal</strong>.</li>
-                <li>"Pitching a sale" produces different intel than "Recruiting".</li>
+                <li>Examples: "Vetting for partnership", "Sales outreach", "Recruitment interview".</li>
                 <li>URLs help verify identity for common names.</li>
               </ul>
             </div>
@@ -104,9 +104,9 @@ const App: React.FC = () => {
                 <div className="p-4 bg-slate-50 rounded-full mb-4">
                   <Sparkles className="w-10 h-10 text-slate-300" />
                 </div>
-                <h3 className="text-lg font-medium text-slate-500">Ready to Compile Dossier</h3>
+                <h3 className="text-lg font-medium text-slate-500">Ready to Analyze</h3>
                 <p className="text-sm text-slate-400 max-w-xs text-center mt-2">
-                  Define your research parameters on the left to generate a strategic intelligence brief.
+                  Define your research parameters on the left to generate a strategic intelligence profile.
                 </p>
               </div>
             )}
