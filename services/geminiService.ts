@@ -10,49 +10,45 @@ export const generateResearchProfile = async (
   goal: string
 ): Promise<ResearchResult> => {
   const prompt = `
-You are an Expert Psychographic Research Analyst. Your specialty is "Soft Signal Analysis"—extracting personality traits and behavioral patterns from public footprints (writing, interviews, social media).
+You are an Expert Intelligence Analyst. Your mission is to provide a dual-layer intelligence dossier on the subject.
 
 TARGET: ${name}
 CONTEXT URL: ${url || "Search based on name and professional context"}
 RESEARCH GOAL: ${goal}
 
 INSTRUCTIONS:
-1. Analyze the subject's public presence to identify personality "buckets" (e.g., "The Visionary Architect," "The Data-Driven Pragmatist").
-2. Create an "Interaction Playbook" based on inferred behavioral traits.
-3. Synthesize standard professional data under a dynamic rubric aligned with the user's specific goal.
+1. **Layer 1: Objective Footprint**: Scan for recent activity, news, interviews, and public posts from the last 12-18 months.
+2. **Layer 2: Subjective Psychographics**: Extract "Soft Signals" to identify personality buckets and create a behavioral "Interaction Playbook".
+3. **Synthesis**: Ensure all intelligence is filtered through the lens of the specific goal: "${goal}".
 
 MANDATORY OUTPUT STRUCTURE (Markdown):
 
 # Intelligence Dossier: ${name}
 
-## 1. Executive Summary
-**Strategic Fit:** How this person aligns with the goal: "${goal}". (2 sentences)
-**Core Persona:** A summary of their professional identity and public "vibe".
+## Executive Summary
+**Strategic Alignment:** 2 sentences on how they fit the goal.
+**The "Vibe" Check:** A brief synthesis of their public persona.
+
+## 1. Digital Footprint & Recent Activity
+(List 3-5 specific, recent professional actions, interviews, or public statements. Be factual and dated if possible.)
 
 ## 2. Psychographic Analysis (Soft Signals)
-(Identify 2-3 "Personality Buckets" based on their communication style and public focus.)
+(Categorize into 2-3 "Personality Buckets")
+### Bucket: [Name]
+* [Analysis of trait and how it manifests]
 
-### Bucket: [Trait Name]
-* [Description of how this trait manifests in their work or speech]
-* [Evidence from public records/writing]
+## 3. Interaction Playbook (CRITICAL)
+(Behavioral advice for high-stakes interaction)
+*   **How to Speak to Them:** (Tone, pace, level of detail)
+*   **Energizing Topics:** (Subjects that trigger positive engagement)
+*   **Friction Points & Dislikes:** (What to avoid at all costs)
+*   **Behavioral Expectations:** (Predicted reactions in stressful or collaborative scenarios)
 
-## 3. The Interaction Playbook
-(Provide actionable behavioral advice)
+## 4. Strategic Rubric: ${goal}
+(Custom analysis strictly relevant to the goal)
 
-*   **Communication Style:** (e.g., "Direct and brief; avoid small talk" or "Story-driven and conceptual")
-*   **Energizing Topics:** (What makes them light up based on their interests/history)
-*   **Friction Points:** (What they dislike, avoid, or find irritating)
-*   **Behavioral Expectations:** (What to expect in a high-stakes setting)
-
-## 4. Strategic Intelligence Rubric
-(3-4 custom sections based strictly on the goal: ${goal})
-
-### [Theme Title]
-* [Data point/Insight]
-* [Data point/Insight]
-
-## 5. Final Analyst Note
-**The "Gold" Insight:** The single most important, non-obvious thing to know before engaging.
+## 5. Analyst's Final Note
+**The "Unfair Advantage":** One non-obvious secret to winning this engagement.
 `;
 
   try {
@@ -61,7 +57,7 @@ MANDATORY OUTPUT STRUCTURE (Markdown):
       contents: prompt,
       config: {
         tools: [{ googleSearch: {} }],
-        thinkingConfig: { thinkingBudget: 2000 }
+        thinkingConfig: { thinkingBudget: 4000 }
       },
     });
 
@@ -80,6 +76,6 @@ MANDATORY OUTPUT STRUCTURE (Markdown):
     return { markdownContent, sources };
   } catch (error) {
     console.error("Gemini API Error:", error);
-    throw new Error("Failed to generate dossier. Ensure the name is correct.");
+    throw new Error("Failed to generate dossier. Connection or search timeout.");
   }
 };
