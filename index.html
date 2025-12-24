@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vantage Intelligence - Strategic Person Research</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>People Insight Generator - Prepare for your meetings</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography,forms,aspect-ratio"></script>
     <script>
       tailwind.config = {
         theme: {
@@ -14,36 +15,97 @@
             },
           },
         },
-        plugins: [
-          function({ addBase, theme }) {
-            addBase({
-              'h1': { fontSize: theme('fontSize.2xl') },
-              'h2': { fontSize: theme('fontSize.xl') },
-              'h3': { fontSize: theme('fontSize.lg') },
-            })
-          }
-        ]
       }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
       body {
         font-family: 'Inter', sans-serif;
+        background-color: #f8fafc;
+        margin: 0;
+        padding: 0;
       }
-      /* Custom scrollbar for better aesthetics */
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-      }
-      ::-webkit-scrollbar-track {
-        background: #f1f5f9;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 4px;
-      }
-      ::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8;
+      ::-webkit-scrollbar { width: 8px; height: 8px; }
+      ::-webkit-scrollbar-track { background: #f1f5f9; }
+      ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+      ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+      /* PRINT STYLES - ENGINEERED FOR PDF RELIABILITY */
+      @media print {
+        @page {
+          margin: 2cm;
+          size: A4 vertical;
+        }
+        
+        /* Hide all UI elements */
+        nav, header, footer, .no-print, button, [role="button"], .sticky, .fixed, .no-export, .alert, .source-card-icon {
+          display: none !important;
+          visibility: hidden !important;
+          height: 0 !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+
+        /* Reset layout for print engines (Chrome/Safari/Firefox) */
+        html, body {
+          background-color: white !important;
+          color: #000 !important;
+          width: 100% !important;
+          height: auto !important;
+          overflow: visible !important;
+          display: block !important;
+          position: static !important;
+        }
+
+        #root, main {
+          display: block !important;
+          width: 100% !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          background: white !important;
+        }
+
+        .print-container {
+          box-shadow: none !important;
+          border: none !important;
+          width: 100% !important;
+          display: block !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+
+        .print-content {
+          width: 100% !important;
+          max-width: none !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          display: block !important;
+        }
+
+        /* Typographic clean-up */
+        .prose {
+          color: black !important;
+          font-size: 11pt !important;
+          line-height: 1.5 !important;
+          max-width: none !important;
+        }
+        
+        h1, h2, h3, h4 { 
+          color: black !important;
+          page-break-after: avoid; 
+          break-after: avoid; 
+        }
+
+        /* Prevent ugly breaks in sections */
+        section, .insight-section, li, p {
+          page-break-inside: avoid;
+          break-inside: avoid;
+        }
+
+        * {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
       }
     </style>
   <script type="importmap">

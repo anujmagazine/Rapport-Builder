@@ -10,48 +10,44 @@ export const generateResearchProfile = async (
   goal: string
 ): Promise<ResearchResult> => {
   const prompt = `
-You are an Expert Intelligence Analyst specializing in Human Behavior and Strategic Communication.
+You are a High-Level Communication Strategist.
 
 TARGET: ${name}
 CONTEXT URL: ${url || "Search based on name and professional context"}
 RESEARCH GOAL: ${goal}
 
 INSTRUCTIONS:
-1. **Plain Language Mandate**: Use accessible, everyday language. Avoid industry buzzwords or unexplained corporate jargon (e.g., instead of "Level-5 Leader," use "A humble yet fiercely determined leader who prioritizes the team's success over personal glory").
-2. **Layer 1: Objective Activity**: Scan for recent news, posts, and public activity from the last 18 months.
-3. **Layer 2: Multi-Dimensional Psychographics**: Identify **3-5 distinct personality buckets**. Provide depth by explaining how these traits interact.
-4. **Layer 3: Behavioral Playbook**: Create an actionable "How-to" guide for interacting with this person based on their character profile.
+1. **Plain Language**: Use clear, everyday English. Avoid jargon like "synergy," "growth-mindset," or "value-add."
+2. **Layer 1: Objective Activity**: Scan for recent news, LinkedIn activity, and professional projects from the last 12-18 months.
+3. **Layer 2: Multi-Dimensional Psychographics**: Break their personality into 3-5 distinct "buckets." Use descriptive names (e.g., "The Rapid-Fire Thinker" instead of "High conscientiousness").
+4. **Layer 3: Interaction Playbook**: Create an actionable "How-to" guide for meeting this person based on their public character.
 
 MANDATORY OUTPUT STRUCTURE (Markdown):
 
-# Intelligence Dossier: ${name}
+# Insight Profile: ${name}
 
 ## Executive Summary
-**Strategic Fit:** (2 sentences in plain English on how they align with the goal: "${goal}")
-**The Persona:** (A descriptive, jargon-free summary of their public identity)
+**Strategic Context:** (How this person aligns with: "${goal}")
+**The Persona:** (A 2-sentence summary of who they are publicly)
 
-## 1. Digital Footprint & Recent Activity
-(List 3-5 specific, recent actions or news points. Explain the significance of each in simple terms.)
+## 1. Digital Footprint
+(List 3 specific, recent actions/news points. Explain why each matters to you in plain terms.)
 
-## 2. Deep Psychographic Spectrum
-(Identify 3-5 "Personality Buckets". Use descriptive names like "The Cautious Strategist" or "The Enthusiastic Storyteller")
+## 2. The Personality Spectrum
+(Define 3-5 Buckets)
 
-### Bucket: [Descriptive Name]
-* **The Behavior:** [Plain English description of how this trait looks in the real world]
-* **The Evidence:** [Specific observation from their public footprint]
-* **Why it Matters:** [How this affects your interaction]
+### Bucket: [Name]
+* **The Trait:** [Description]
+* **The Evidence:** [Based on their activity]
+* **Why it Matters:** [How to use this knowledge]
 
-## 3. Interaction Playbook (Actionable)
-*   **The Best Approach:** (How to start a conversation or meeting)
-*   **What Energizes Them:** (Topics or styles they respond positively to)
-*   **What Drains or Irritates Them:** (Behavioral friction points to avoid)
-*   **Response Patterns:** (What to expect when they are challenged or interested)
+## 3. Meeting Playbook (Actionable)
+*   **The Best Approach:** (How to start the meeting)
+*   **What Energizes Them:** (Topics/Styles to use)
+*   **What Irritates Them:** (Behavioral friction to avoid)
 
-## 4. Strategic Analysis: ${goal}
-(3 custom sections tailored to the goal, using zero jargon)
-
-## 5. Analyst's Secret
-**The "Closing Insight":** One simple, non-obvious piece of advice that would make an interaction successful.
+## 4. Closing Insight
+One simple piece of advice that makes an interaction with ${name} successful.
 `;
 
   try {
@@ -79,6 +75,6 @@ MANDATORY OUTPUT STRUCTURE (Markdown):
     return { markdownContent, sources };
   } catch (error) {
     console.error("Gemini API Error:", error);
-    throw new Error("Failed to generate dossier. Connection or search timeout.");
+    throw new Error("Search timed out. Please try again in a moment.");
   }
 };
