@@ -10,45 +10,48 @@ export const generateResearchProfile = async (
   goal: string
 ): Promise<ResearchResult> => {
   const prompt = `
-You are an Expert Intelligence Analyst. Your mission is to provide a dual-layer intelligence dossier on the subject.
+You are an Expert Intelligence Analyst specializing in Human Behavior and Strategic Communication.
 
 TARGET: ${name}
 CONTEXT URL: ${url || "Search based on name and professional context"}
 RESEARCH GOAL: ${goal}
 
 INSTRUCTIONS:
-1. **Layer 1: Objective Footprint**: Scan for recent activity, news, interviews, and public posts from the last 12-18 months.
-2. **Layer 2: Subjective Psychographics**: Extract "Soft Signals" to identify personality buckets and create a behavioral "Interaction Playbook".
-3. **Synthesis**: Ensure all intelligence is filtered through the lens of the specific goal: "${goal}".
+1. **Plain Language Mandate**: Use accessible, everyday language. Avoid industry buzzwords or unexplained corporate jargon (e.g., instead of "Level-5 Leader," use "A humble yet fiercely determined leader who prioritizes the team's success over personal glory").
+2. **Layer 1: Objective Activity**: Scan for recent news, posts, and public activity from the last 18 months.
+3. **Layer 2: Multi-Dimensional Psychographics**: Identify **3-5 distinct personality buckets**. Provide depth by explaining how these traits interact.
+4. **Layer 3: Behavioral Playbook**: Create an actionable "How-to" guide for interacting with this person based on their character profile.
 
 MANDATORY OUTPUT STRUCTURE (Markdown):
 
 # Intelligence Dossier: ${name}
 
 ## Executive Summary
-**Strategic Alignment:** 2 sentences on how they fit the goal.
-**The "Vibe" Check:** A brief synthesis of their public persona.
+**Strategic Fit:** (2 sentences in plain English on how they align with the goal: "${goal}")
+**The Persona:** (A descriptive, jargon-free summary of their public identity)
 
 ## 1. Digital Footprint & Recent Activity
-(List 3-5 specific, recent professional actions, interviews, or public statements. Be factual and dated if possible.)
+(List 3-5 specific, recent actions or news points. Explain the significance of each in simple terms.)
 
-## 2. Psychographic Analysis (Soft Signals)
-(Categorize into 2-3 "Personality Buckets")
-### Bucket: [Name]
-* [Analysis of trait and how it manifests]
+## 2. Deep Psychographic Spectrum
+(Identify 3-5 "Personality Buckets". Use descriptive names like "The Cautious Strategist" or "The Enthusiastic Storyteller")
 
-## 3. Interaction Playbook (CRITICAL)
-(Behavioral advice for high-stakes interaction)
-*   **How to Speak to Them:** (Tone, pace, level of detail)
-*   **Energizing Topics:** (Subjects that trigger positive engagement)
-*   **Friction Points & Dislikes:** (What to avoid at all costs)
-*   **Behavioral Expectations:** (Predicted reactions in stressful or collaborative scenarios)
+### Bucket: [Descriptive Name]
+* **The Behavior:** [Plain English description of how this trait looks in the real world]
+* **The Evidence:** [Specific observation from their public footprint]
+* **Why it Matters:** [How this affects your interaction]
 
-## 4. Strategic Rubric: ${goal}
-(Custom analysis strictly relevant to the goal)
+## 3. Interaction Playbook (Actionable)
+*   **The Best Approach:** (How to start a conversation or meeting)
+*   **What Energizes Them:** (Topics or styles they respond positively to)
+*   **What Drains or Irritates Them:** (Behavioral friction points to avoid)
+*   **Response Patterns:** (What to expect when they are challenged or interested)
 
-## 5. Analyst's Final Note
-**The "Unfair Advantage":** One non-obvious secret to winning this engagement.
+## 4. Strategic Analysis: ${goal}
+(3 custom sections tailored to the goal, using zero jargon)
+
+## 5. Analyst's Secret
+**The "Closing Insight":** One simple, non-obvious piece of advice that would make an interaction successful.
 `;
 
   try {

@@ -4,7 +4,7 @@ import { FormState, ResearchResult } from "./types";
 import { generateResearchProfile } from "./services/geminiService";
 import { InputForm } from "./components/InputForm";
 import { ResultDisplay } from "./components/ResultDisplay";
-import { Sparkles, AlertCircle, UserSearch, BrainCircuit, ArrowLeft, Loader2 } from "lucide-react";
+import { Sparkles, AlertCircle, UserSearch, BrainCircuit, ArrowLeft, Loader2, BookOpen } from "lucide-react";
 
 type ViewMode = "form" | "loading" | "result";
 
@@ -45,7 +45,6 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans">
-      {/* Header - Stays consistent or changes slightly based on view */}
       <header className="bg-white border-b border-slate-200 py-4 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -70,7 +69,7 @@ const App: React.FC = () => {
           <div className="hidden md:flex items-center gap-6">
             <div className="flex flex-col items-end">
               <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Protocol</span>
-              <span className="text-xs font-bold text-slate-900">Psychographic Deep Scan</span>
+              <span className="text-xs font-bold text-slate-900">High-Depth Character Scan</span>
             </div>
           </div>
         </div>
@@ -102,28 +101,40 @@ const App: React.FC = () => {
                 <div className="absolute -right-8 -top-8 w-32 h-32 bg-indigo-800 rounded-full opacity-50 blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
                 <h4 className="font-black text-xs uppercase tracking-[0.2em] mb-6 flex items-center gap-2 relative z-10">
                   <Sparkles className="w-4 h-4 text-indigo-400" />
-                  System Capabilities
+                  Advanced Protocol
                 </h4>
                 <ul className="space-y-6 relative z-10">
                   <li className="flex gap-4">
                     <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-800 flex items-center justify-center text-xs font-bold">01</div>
                     <p className="text-sm leading-relaxed text-indigo-100 font-medium">
-                      <strong className="text-white">Recent Activity Tracking:</strong> Scans the last 18 months of public footprints for actionable news.
+                      <strong className="text-white">Recent Footprints:</strong> Detailed tracking of public actions and statements from the last 18 months.
                     </p>
                   </li>
                   <li className="flex gap-4">
                     <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-800 flex items-center justify-center text-xs font-bold">02</div>
                     <p className="text-sm leading-relaxed text-indigo-100 font-medium">
-                      <strong className="text-white">Soft Signal Extraction:</strong> Inferred personality traits based on linguistic and public behavioral patterns.
+                      <strong className="text-white">Multi-Bucket Analysis:</strong> Deep psychographic extraction covering 3-5 distinct character traits.
                     </p>
                   </li>
                   <li className="flex gap-4">
                     <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-800 flex items-center justify-center text-xs font-bold">03</div>
                     <p className="text-sm leading-relaxed text-indigo-100 font-medium">
-                      <strong className="text-white">Interaction Playbooks:</strong> Strategic advice on tone, energizing topics, and friction points.
+                      <strong className="text-white">Plain English Reports:</strong> Professional insights delivered without complex corporate jargon.
                     </p>
                   </li>
                 </ul>
+              </div>
+
+              <div className="p-6 rounded-2xl border border-slate-200 bg-white">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-emerald-50 rounded-lg">
+                    <BookOpen className="w-4 h-4 text-emerald-600" />
+                  </div>
+                  <h5 className="text-sm font-black uppercase tracking-wider text-slate-800">Accessibility Mode</h5>
+                </div>
+                <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                  Vantage is tuned to translate complex social and professional behaviors into actionable human insights. No prior knowledge of management theory required.
+                </p>
               </div>
             </div>
           </div>
@@ -136,14 +147,14 @@ const App: React.FC = () => {
               <BrainCircuit className="w-8 h-8 text-indigo-600 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
             </div>
             <div className="text-center space-y-4 max-w-md">
-              <h2 className="text-2xl font-black text-slate-900 tracking-tight">Compiling Intelligence Dossier</h2>
+              <h2 className="text-2xl font-black text-slate-900 tracking-tight">Compiling Deep Intelligence</h2>
               <div className="flex flex-col gap-2">
                 <p className="text-slate-500 text-sm font-medium animate-pulse flex items-center justify-center gap-2">
                   <Loader2 className="w-3 h-3 animate-spin" />
-                  Scanning public records for {formState.personName}...
+                  Analyzing 5 character dimensions for {formState.personName}...
                 </p>
-                <p className="text-slate-400 text-xs px-8">
-                  Vantage is currently analyzing "soft signals" and recent activity to build your strategic playbook. This typically takes 15-30 seconds.
+                <p className="text-slate-400 text-xs px-8 italic">
+                  "Translating complex public footprints into human-centered strategy..."
                 </p>
               </div>
             </div>
@@ -159,7 +170,7 @@ const App: React.FC = () => {
       
       <footer className="py-12 border-t border-slate-100 text-center">
         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-          Vantage Intelligence Protocol © 2025 • Confidential Strategic Resource
+          Vantage Intelligence Protocol © 2025 • High-Depth Strategic Analysis
         </p>
       </footer>
     </div>

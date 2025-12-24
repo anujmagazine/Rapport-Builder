@@ -2,7 +2,7 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { ResearchResult } from "../types";
-import { ExternalLink, Download, Copy, BrainCircuit, Activity, ShieldCheck, Zap, ArrowLeft } from "lucide-react";
+import { ExternalLink, Download, Copy, BrainCircuit, Activity, ShieldCheck, Zap, ArrowLeft, Info } from "lucide-react";
 
 interface ResultDisplayProps {
   result: ResearchResult;
@@ -55,26 +55,26 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
       </div>
 
       {/* Main Dossier Content */}
-      <div className="p-8 md:p-20 max-w-[80ch] mx-auto bg-white min-h-[1000px]">
+      <div className="p-8 md:p-20 max-w-[85ch] mx-auto bg-white min-h-[1000px]">
         <article className="prose prose-slate max-w-none">
           <ReactMarkdown
             components={{
               h1: ({ node, ...props }) => (
                 <div className="mb-20 pb-10 border-b-[12px] border-slate-900">
-                  <span className="text-[11px] font-black text-indigo-600 uppercase tracking-[0.4em] block mb-4">Subject Profile / Internal Use Only</span>
+                  <span className="text-[11px] font-black text-indigo-600 uppercase tracking-[0.4em] block mb-4">Internal Intelligence Profile</span>
                   <h1 className="text-6xl font-black text-slate-900 tracking-tight leading-[0.9] m-0" {...props} />
                 </div>
               ),
               h2: ({ node, children, ...props }) => {
                 const text = String(children).toLowerCase();
                 const isPlaybook = text.includes("playbook") || text.includes("interact");
-                const isPsych = text.includes("psychographic") || text.includes("personality");
+                const isPsych = text.includes("psychographic") || text.includes("personality") || text.includes("spectrum");
                 const isActivity = text.includes("activity") || text.includes("footprint");
                 const isSummary = text.includes("summary");
                 
                 return (
                   <h2 
-                    className={`text-xl font-black uppercase tracking-[0.15em] mt-20 mb-10 flex items-center gap-4 p-5 rounded-2xl border-2 ${
+                    className={`text-xl font-black uppercase tracking-[0.15em] mt-24 mb-10 flex items-center gap-4 p-5 rounded-2xl border-2 ${
                       isPlaybook ? "bg-amber-50 text-amber-900 border-amber-200 shadow-sm" : 
                       isPsych ? "bg-indigo-50 text-indigo-900 border-indigo-100" : 
                       isActivity ? "bg-slate-900 text-white border-slate-900" :
@@ -91,27 +91,28 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                 );
               },
               h3: ({ node, ...props }) => (
-                <h3 className="text-xl font-black text-slate-800 mt-14 mb-6 flex items-center gap-3 pb-3 border-b-4 border-slate-100 group" {...props} />
+                <h3 className="text-xl font-black text-slate-800 mt-16 mb-6 flex items-center gap-3 pb-3 border-b-4 border-slate-100 group" {...props} />
               ),
               p: ({ node, ...props }) => (
-                <p className="text-[18px] leading-[1.7] text-slate-700 mb-10 font-medium selection:bg-indigo-100" {...props} />
+                <p className="text-[18px] leading-[1.8] text-slate-700 mb-10 font-medium selection:bg-indigo-100" {...props} />
               ),
               ul: ({ node, ...props }) => (
                 <ul className="space-y-6 mb-12 list-none pl-0" {...props} />
               ),
               li: ({ node, children, ...props }) => {
                 const text = String(children).toLowerCase();
-                const isNegative = text.includes("friction") || text.includes("dislike") || text.includes("avoid") || text.includes("negative");
-                const isAction = text.includes("how to") || text.includes("energize") || text.includes("style");
-                const isDated = text.includes("2024") || text.includes("2025") || text.includes("recent");
+                const isNegative = text.includes("friction") || text.includes("irritate") || text.includes("avoid");
+                const isAction = text.includes("how to") || text.includes("energize") || text.includes("best approach");
+                const isWhy = text.includes("why it matters") || text.includes("significance");
                 
                 return (
                   <li className={`p-6 rounded-2xl border-l-8 leading-relaxed shadow-sm transition-all hover:translate-x-1 ${
                     isNegative ? "bg-red-50/50 border-red-500 text-red-950" : 
                     isAction ? "bg-emerald-50/50 border-emerald-500 text-emerald-950" :
-                    isDated ? "bg-slate-50 border-slate-800 text-slate-900" :
+                    isWhy ? "bg-indigo-50/30 border-indigo-400 italic text-indigo-950" :
                     "bg-white border-slate-200 text-slate-700"
                   }`} {...props}>
+                    {isWhy && <Info className="w-4 h-4 mb-2 opacity-50" />}
                     {children}
                   </li>
                 );
@@ -133,10 +134,10 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                 <h4 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2 flex items-center gap-2">
                   Metadata
                 </h4>
-                <h3 className="text-2xl font-black text-slate-900">Intelligence Sources</h3>
+                <h3 className="text-2xl font-black text-slate-900">Verified Intelligence Points</h3>
               </div>
               <div className="bg-indigo-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest">
-                {result.sources.length} Points Verified
+                {result.sources.length} Data Sources
               </div>
             </div>
             
@@ -156,7 +157,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                     </div>
                     <div className="flex flex-col min-w-0">
                       <span className="text-sm font-black text-slate-800 truncate leading-tight">
-                        {source.title || "Classified Document Source"}
+                        {source.title || "External Intelligence Source"}
                       </span>
                       <span className="text-[10px] text-indigo-600 font-bold uppercase tracking-tighter mt-1 group-hover:tracking-widest transition-all">
                         {new URL(source.uri).hostname}
