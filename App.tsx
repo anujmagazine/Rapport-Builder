@@ -4,26 +4,26 @@ import { FormState, ResearchResult } from "./types";
 import { generateResearchProfile } from "./services/geminiService";
 import { InputForm } from "./components/InputForm";
 import { ResultDisplay } from "./components/ResultDisplay";
-// Fixed the missing BrainCircuit import
-import { Sparkles, AlertCircle, ScanSearch, UserSearch, BrainCircuit } from "lucide-react";
+import { Sparkles, AlertCircle, UserSearch, BrainCircuit, ArrowLeft, Loader2 } from "lucide-react";
+
+type ViewMode = "form" | "loading" | "result";
 
 const App: React.FC = () => {
+  const [viewMode, setViewMode] = useState<ViewMode>("form");
   const [formState, setFormState] = useState<FormState>({
     personName: "",
     linkedinUrl: "",
     researchGoal: "",
   });
 
-  const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<ResearchResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async () => {
     if (!formState.personName || !formState.researchGoal) return;
 
-    setIsLoading(true);
+    setViewMode("loading");
     setError(null);
-    setResult(null);
 
     try {
       const data = await generateResearchProfile(
@@ -32,109 +32,136 @@ const App: React.FC = () => {
         formState.researchGoal
       );
       setResult(data);
+      setViewMode("result");
     } catch (err: any) {
       setError(err.message || "An unexpected error occurred");
-    } finally {
-      setIsLoading(false);
+      setViewMode("form");
     }
   };
 
+  const handleBack = () => {
+    setViewMode("form");
+  };
+
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans pb-20">
-      <header className="bg-white border-b border-slate-200 py-6 sticky top-0 z-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="p-2.5 bg-slate-900 rounded-xl shadow-lg">
-              <UserSearch className="w-6 h-6 text-white" />
+    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans">
+      {/* Header - Stays consistent or changes slightly based on view */}
+      <header className="bg-white border-b border-slate-200 py-4 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {viewMode === "result" && (
+              <button 
+                onClick={handleBack}
+                className="mr-2 p-2 hover:bg-slate-100 rounded-full transition-colors group"
+                title="Back to Input"
+              >
+                <ArrowLeft className="w-5 h-5 text-slate-600 group-hover:text-indigo-600" />
+              </button>
+            )}
+            <div className="p-2 bg-slate-900 rounded-lg shadow-sm">
+              <UserSearch className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-black tracking-tight text-slate-900">VANTAGE</h1>
-              <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-[0.2em]">Psychographic Intelligence</p>
+              <h1 className="text-lg font-black tracking-tight text-slate-900 leading-none">VANTAGE</h1>
+              <p className="text-[9px] font-bold text-indigo-600 uppercase tracking-[0.2em] mt-1">Intelligence Engine</p>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="hidden md:flex flex-col items-end">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Analysis Engine</span>
-              <span className="text-xs font-bold text-slate-900">Gemini 3 Pro Deep Research</span>
+          
+          <div className="hidden md:flex items-center gap-6">
+            <div className="flex flex-col items-end">
+              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Protocol</span>
+              <span className="text-xs font-bold text-slate-900">Psychographic Deep Scan</span>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          
-          <div className="lg:col-span-4 space-y-8">
-            <div className="lg:sticky lg:top-32">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {viewMode === "form" && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start py-8">
+            <div className="lg:col-span-7">
+              {error && (
+                <div className="bg-red-50 border-2 border-red-100 p-6 mb-8 rounded-2xl flex items-start gap-4 animate-in fade-in slide-in-from-top-4 duration-300">
+                  <AlertCircle className="h-6 w-6 text-red-500 flex-shrink-0" />
+                  <div>
+                    <h3 className="text-sm font-bold text-red-900 uppercase tracking-wider">Analysis Interrupted</h3>
+                    <p className="text-sm text-red-700 mt-1 font-medium">{error}</p>
+                  </div>
+                </div>
+              )}
               <InputForm
                 formState={formState}
                 setFormState={setFormState}
                 onSubmit={handleSubmit}
-                isLoading={isLoading}
+                isLoading={false}
               />
-              
-              <div className="mt-8 p-6 rounded-2xl bg-indigo-900 text-white shadow-xl shadow-indigo-200">
-                <h4 className="font-black text-xs uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+            </div>
+            
+            <div className="lg:col-span-5 space-y-6">
+              <div className="p-8 rounded-3xl bg-indigo-900 text-white shadow-2xl shadow-indigo-200 overflow-hidden relative group">
+                <div className="absolute -right-8 -top-8 w-32 h-32 bg-indigo-800 rounded-full opacity-50 blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+                <h4 className="font-black text-xs uppercase tracking-[0.2em] mb-6 flex items-center gap-2 relative z-10">
                   <Sparkles className="w-4 h-4 text-indigo-400" />
-                  Deep Analysis Tips
+                  System Capabilities
                 </h4>
-                <ul className="space-y-4 text-sm opacity-90 font-medium">
-                  <li className="flex gap-3">
-                    <span className="text-indigo-400">01</span>
-                    Focus on "How to engage" goals to trigger the behavioral playbook.
+                <ul className="space-y-6 relative z-10">
+                  <li className="flex gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-800 flex items-center justify-center text-xs font-bold">01</div>
+                    <p className="text-sm leading-relaxed text-indigo-100 font-medium">
+                      <strong className="text-white">Recent Activity Tracking:</strong> Scans the last 18 months of public footprints for actionable news.
+                    </p>
                   </li>
-                  <li className="flex gap-3">
-                    <span className="text-indigo-400">02</span>
-                    Provide a LinkedIn URL to increase accuracy for common names.
+                  <li className="flex gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-800 flex items-center justify-center text-xs font-bold">02</div>
+                    <p className="text-sm leading-relaxed text-indigo-100 font-medium">
+                      <strong className="text-white">Soft Signal Extraction:</strong> Inferred personality traits based on linguistic and public behavioral patterns.
+                    </p>
                   </li>
-                  <li className="flex gap-3">
-                    <span className="text-indigo-400">03</span>
-                    The engine scans for "soft signals" in public writing and interviews.
+                  <li className="flex gap-4">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-indigo-800 flex items-center justify-center text-xs font-bold">03</div>
+                    <p className="text-sm leading-relaxed text-indigo-100 font-medium">
+                      <strong className="text-white">Interaction Playbooks:</strong> Strategic advice on tone, energizing topics, and friction points.
+                    </p>
                   </li>
                 </ul>
               </div>
             </div>
           </div>
+        )}
 
-          <div className="lg:col-span-8">
-            {error && (
-              <div className="bg-red-50 border-2 border-red-100 p-6 mb-8 rounded-2xl flex items-start gap-4 shadow-sm">
-                <AlertCircle className="h-6 w-6 text-red-500 flex-shrink-0" />
-                <div>
-                  <h3 className="text-sm font-bold text-red-900 uppercase tracking-wider">Analysis Failed</h3>
-                  <p className="text-sm text-red-700 mt-1 font-medium">{error}</p>
-                </div>
-              </div>
-            )}
-
-            {!result && !isLoading && !error && (
-              <div className="flex flex-col items-center justify-center py-32 bg-white rounded-3xl border-2 border-dashed border-slate-200">
-                <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
-                  <ScanSearch className="w-10 h-10 text-slate-300" />
-                </div>
-                <h3 className="text-xl font-black text-slate-800 tracking-tight">System Idle</h3>
-                <p className="text-slate-400 text-sm max-w-[280px] text-center mt-3 font-medium">
-                  Enter a subject's details to begin psychographic signal extraction.
+        {viewMode === "loading" && (
+          <div className="min-h-[70vh] flex flex-col items-center justify-center animate-in fade-in duration-500">
+            <div className="relative mb-12">
+              <div className="w-24 h-24 border-4 border-slate-100 border-t-indigo-600 rounded-full animate-spin"></div>
+              <BrainCircuit className="w-8 h-8 text-indigo-600 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+            </div>
+            <div className="text-center space-y-4 max-w-md">
+              <h2 className="text-2xl font-black text-slate-900 tracking-tight">Compiling Intelligence Dossier</h2>
+              <div className="flex flex-col gap-2">
+                <p className="text-slate-500 text-sm font-medium animate-pulse flex items-center justify-center gap-2">
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                  Scanning public records for {formState.personName}...
+                </p>
+                <p className="text-slate-400 text-xs px-8">
+                  Vantage is currently analyzing "soft signals" and recent activity to build your strategic playbook. This typically takes 15-30 seconds.
                 </p>
               </div>
-            )}
-
-            {isLoading && (
-              <div className="flex flex-col items-center justify-center py-32 bg-white rounded-3xl border border-slate-100 shadow-sm">
-                <div className="relative">
-                  <div className="w-16 h-16 border-4 border-indigo-100 border-t-indigo-600 rounded-full animate-spin"></div>
-                  {/* BrainCircuit is now imported correctly */}
-                  <BrainCircuit className="w-6 h-6 text-indigo-600 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-                </div>
-                <h3 className="text-lg font-black text-slate-900 mt-8 tracking-tight animate-pulse">Scanning Public Signals</h3>
-                <p className="text-slate-400 text-sm mt-2 font-medium">Extracting behavioral patterns and playbook insights...</p>
-              </div>
-            )}
-
-            {result && !isLoading && <ResultDisplay result={result} />}
+            </div>
           </div>
-        </div>
+        )}
+
+        {viewMode === "result" && result && (
+          <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 py-4">
+            <ResultDisplay result={result} onBack={handleBack} />
+          </div>
+        )}
       </main>
+      
+      <footer className="py-12 border-t border-slate-100 text-center">
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+          Vantage Intelligence Protocol © 2025 • Confidential Strategic Resource
+        </p>
+      </footer>
     </div>
   );
 };
