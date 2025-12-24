@@ -1,3 +1,4 @@
+
 import { GoogleGenAI } from "@google/genai";
 import { ResearchResult } from "../types";
 
@@ -9,85 +10,76 @@ export const generateResearchProfile = async (
   goal: string
 ): Promise<ResearchResult> => {
   const prompt = `
-You are an Expert Intelligence Analyst, specializing in creating high-impact, action-oriented professional dossiers. Your primary function is to analyze a user's stated research goal and dynamically generate a relevant research rubric, then populate that rubric with verifiable, up-to-date information. Your output must be a concise, structured intelligence report designed for optimal decision-making.
+You are an Expert Psychographic Research Analyst. Your specialty is "Soft Signal Analysis"—extracting personality traits and behavioral patterns from public footprints (writing, interviews, social media).
 
-INSTRUCTION SET & VARIABLES:
+TARGET: ${name}
+CONTEXT URL: ${url || "Search based on name and professional context"}
+RESEARCH GOAL: ${goal}
 
-TARGET PERSON: ${name}
-
-LINKEDIN/CONTEXT URL: ${url || "Not provided, please search based on name and context"}
-
-RESEARCH CONTEXT & GOAL: ${goal}
-
-CORE TASK SEQUENCE:
-
-1. Dynamic Rubric Creation: Based only on the 'RESEARCH CONTEXT & GOAL', formulate a 4-5 point thematic rubric. Each point must represent a critical area of insight required for this specific objective (e.g., if the goal is "investing in their startup," themes might be 'Market Viability,' 'Previous Exits,' and 'Reputation').
-2. Information Synthesis & Grounding: Use Google Search grounding to gather recent, verifiable information about ${name}, their company, and their professional background.
-3. Organization and Population: Organize all synthesized information exclusively under the sections defined by your dynamic rubric. Focus on strategic insights, not just biographical facts.
+INSTRUCTIONS:
+1. Analyze the subject's public presence to identify personality "buckets" (e.g., "The Visionary Architect," "The Data-Driven Pragmatist").
+2. Create an "Interaction Playbook" based on inferred behavioral traits.
+3. Synthesize standard professional data under a dynamic rubric aligned with the user's specific goal.
 
 MANDATORY OUTPUT STRUCTURE (Markdown):
 
 # Intelligence Dossier: ${name}
 
-## 1. Context & Core Persona
+## 1. Executive Summary
+**Strategic Fit:** How this person aligns with the goal: "${goal}". (2 sentences)
+**Core Persona:** A summary of their professional identity and public "vibe".
 
-**Stated Objective:** A direct, 1-sentence restatement of the 'Research Context & Goal'.
+## 2. Psychographic Analysis (Soft Signals)
+(Identify 2-3 "Personality Buckets" based on their communication style and public focus.)
 
-**Key Persona Insights:** A 2-3 sentence summary of their current role, professional trajectory, and general public focus derived from the research.
+### Bucket: [Trait Name]
+* [Description of how this trait manifests in their work or speech]
+* [Evidence from public records/writing]
 
-## 2. Dynamic Intelligence Rubric
+## 3. The Interaction Playbook
+(Provide actionable behavioral advice)
 
-(Generate 4-5 thematic points based on the research goal. Use Level 3 Headings (###) for these themes.)
+*   **Communication Style:** (e.g., "Direct and brief; avoid small talk" or "Story-driven and conceptual")
+*   **Energizing Topics:** (What makes them light up based on their interests/history)
+*   **Friction Points:** (What they dislike, avoid, or find irritating)
+*   **Behavioral Expectations:** (What to expect in a high-stakes setting)
 
-### [Theme 1 Title]
-*   [Insight/Data Point 1]
-*   [Insight/Data Point 2]
-*   [Insight/Data Point 3]
+## 4. Strategic Intelligence Rubric
+(3-4 custom sections based strictly on the goal: ${goal})
 
-### [Theme 2 Title]
-... (continue for all points)
+### [Theme Title]
+* [Data point/Insight]
+* [Data point/Insight]
 
-## 3. Strategic Takeaways
-
-**Key Conversation/Decision Driver:** A single, high-impact topic or fact derived from the research that is most critical to the user's goal. (1 sentence)
-
-**Analyst Note:** The single most important research insight the user should keep in mind. (1 sentence)
-
-Ensure the entire output is strictly organized by this structure, professional in tone, and highly relevant to the stated goal.
+## 5. Final Analyst Note
+**The "Gold" Insight:** The single most important, non-obvious thing to know before engaging.
 `;
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: 'gemini-3-pro-preview',
       contents: prompt,
       config: {
         tools: [{ googleSearch: {} }],
+        thinkingConfig: { thinkingBudget: 2000 }
       },
     });
 
-    const markdownContent = response.text || "No analysis could be generated. Please try again.";
-
-    // Extract sources from grounding chunks
+    const markdownContent = response.text || "Analysis could not be generated.";
     const sources: { uri: string; title: string }[] = [];
     const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
 
     if (chunks) {
       chunks.forEach((chunk: any) => {
         if (chunk.web) {
-          sources.push({
-            uri: chunk.web.uri,
-            title: chunk.web.title,
-          });
+          sources.push({ uri: chunk.web.uri, title: chunk.web.title });
         }
       });
     }
 
-    return {
-      markdownContent,
-      sources,
-    };
+    return { markdownContent, sources };
   } catch (error) {
     console.error("Gemini API Error:", error);
-    throw new Error("Failed to generate intelligence dossier. Please check your inputs and try again.");
+    throw new Error("Failed to generate dossier. Ensure the name is correct.");
   }
 };

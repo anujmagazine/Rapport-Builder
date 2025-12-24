@@ -1,7 +1,8 @@
+
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { ResearchResult } from "../types";
-import { FileText, ExternalLink, Download, Copy } from "lucide-react";
+import { FileText, ExternalLink, Download, Copy, BrainCircuit, PlayCircle } from "lucide-react";
 
 interface ResultDisplayProps {
   result: ResearchResult;
@@ -13,87 +14,79 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden">
+    <div className="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden">
       {/* Toolbar */}
-      <div className="bg-slate-50/80 backdrop-blur-sm px-6 py-4 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10">
-        <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-          <FileText className="w-5 h-5 text-indigo-600" />
-          Intelligence Dossier
+      <div className="bg-slate-900 px-6 py-4 border-b border-slate-800 flex justify-between items-center sticky top-0 z-10 text-white">
+        <h2 className="text-lg font-bold flex items-center gap-2">
+          <BrainCircuit className="w-5 h-5 text-indigo-400" />
+          Intelligence Report
         </h2>
         <div className="flex gap-2">
           <button
             onClick={handleCopy}
-            className="p-2 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-md transition-all"
-            title="Copy to Clipboard"
+            className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-md transition-all"
+            title="Copy"
           >
             <Copy className="w-4 h-4" />
           </button>
           <button
              onClick={() => window.print()}
-             className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50 hover:text-indigo-600 transition-all shadow-sm"
+             className="flex items-center gap-2 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white bg-indigo-600 rounded-md hover:bg-indigo-500 transition-all shadow-lg"
           >
             <Download className="w-4 h-4" />
-            Export PDF
+            PDF Export
           </button>
         </div>
       </div>
 
       {/* Content Area */}
-      <div className="p-8 md:p-12 max-w-[65ch] mx-auto">
+      <div className="p-8 md:p-16 max-w-[72ch] mx-auto bg-white">
         <article className="prose prose-slate max-w-none">
           <ReactMarkdown
             components={{
-              // Main Title
               h1: ({ node, ...props }) => (
-                <h1 
-                  className="text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight mb-8 pb-4 border-b-2 border-slate-100" 
-                  {...props} 
-                />
+                <h1 className="text-4xl font-black text-slate-900 tracking-tighter mb-12 pb-6 border-b-4 border-slate-900" {...props} />
               ),
-              // Section Headers (Thematic)
-              h2: ({ node, ...props }) => (
-                <h2 
-                  className="text-2xl font-bold text-slate-900 mt-12 mb-6 border-b border-slate-200 pb-2" 
-                  {...props} 
-                />
-              ),
-              // Sub Headers (Points)
+              h2: ({ node, children, ...props }) => {
+                const isPlaybook = String(children).toLowerCase().includes("playbook");
+                const isPsych = String(children).toLowerCase().includes("psychographic");
+                
+                return (
+                  <h2 
+                    className={`text-xl font-black uppercase tracking-widest mt-16 mb-8 flex items-center gap-3 p-3 rounded-lg ${
+                      isPlaybook ? "bg-amber-50 text-amber-900 border-l-4 border-amber-500" : 
+                      isPsych ? "bg-indigo-50 text-indigo-900 border-l-4 border-indigo-500" : 
+                      "text-slate-900 border-b-2 border-slate-100"
+                    }`} 
+                    {...props}
+                  >
+                    {isPlaybook && <PlayCircle className="w-5 h-5" />}
+                    {children}
+                  </h2>
+                );
+              },
               h3: ({ node, ...props }) => (
-                <h3 
-                  className="text-lg font-bold text-indigo-700 mt-8 mb-3 flex items-center gap-2" 
-                  {...props} 
-                />
+                <h3 className="text-lg font-bold text-slate-800 mt-10 mb-4 flex items-center gap-2 italic before:content-['//'] before:text-indigo-500 before:font-mono" {...props} />
               ),
-              // Standard Text
               p: ({ node, ...props }) => (
-                <p 
-                  className="text-[16px] leading-7 text-slate-700 mb-5 font-normal" 
-                  {...props} 
-                />
+                <p className="text-[17px] leading-relaxed text-slate-700 mb-6 font-normal selection:bg-indigo-100" {...props} />
               ),
-              // Lists
               ul: ({ node, ...props }) => (
-                <ul 
-                  className="space-y-3 mb-6 list-disc list-outside ml-4 text-slate-700" 
-                  {...props} 
-                />
+                <ul className="space-y-4 mb-8 list-none pl-0" {...props} />
               ),
-              li: ({ node, ...props }) => (
-                <li 
-                  className="pl-2 leading-7 marker:text-indigo-400" 
-                  {...props} 
-                />
-              ),
-              // Blockquotes (for Key Insights if used)
-              blockquote: ({ node, ...props }) => (
-                <blockquote 
-                  className="border-l-4 border-indigo-500 bg-indigo-50/50 pl-4 py-3 italic text-slate-700 rounded-r-lg my-6" 
-                  {...props} 
-                />
-              ),
-              // Bold text
+              li: ({ node, children, ...props }) => {
+                const content = String(children);
+                const isNegative = content.toLowerCase().includes("friction") || content.toLowerCase().includes("dislike");
+                return (
+                  <li className={`p-4 rounded-xl border leading-relaxed shadow-sm transition-all hover:shadow-md ${
+                    isNegative ? "bg-red-50/30 border-red-100" : "bg-slate-50/50 border-slate-100"
+                  }`} {...props}>
+                    {children}
+                  </li>
+                );
+              },
               strong: ({ node, ...props }) => (
-                <strong className="font-bold text-slate-900" {...props} />
+                <strong className="font-extrabold text-slate-900 bg-slate-100 px-1 rounded" {...props} />
               )
             }}
           >
@@ -101,30 +94,30 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result }) => {
           </ReactMarkdown>
         </article>
 
-        {/* Sources Section */}
+        {/* Sources */}
         {result.sources && result.sources.length > 0 && (
-          <div className="mt-16 pt-8 border-t-2 border-slate-100">
-            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">
-              Verified Information Sources
+          <div className="mt-24 pt-10 border-t border-slate-200">
+            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-8">
+              Verification Footprints
             </h4>
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 gap-2">
               {result.sources.map((source, index) => (
                 <a
                   key={index}
                   href={source.uri}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3 rounded-md bg-slate-50 border border-slate-200 hover:border-indigo-300 hover:shadow-sm transition-all group no-underline"
+                  className="flex items-center justify-between p-4 rounded-xl bg-white border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/30 transition-all group"
                 >
-                  <div className="flex items-center gap-3 overflow-hidden">
-                    <div className="bg-white p-1.5 rounded-md border border-slate-100 shadow-sm flex-shrink-0">
-                      <ExternalLink className="w-4 h-4 text-indigo-500" />
+                  <div className="flex items-center gap-4 overflow-hidden">
+                    <div className="bg-slate-100 p-2 rounded-lg group-hover:bg-white transition-colors">
+                      <ExternalLink className="w-4 h-4 text-slate-500 group-hover:text-indigo-600" />
                     </div>
                     <div className="flex flex-col min-w-0">
-                      <span className="text-sm font-semibold text-slate-700 group-hover:text-indigo-700 truncate">
-                        {source.title || "Web Resource"}
+                      <span className="text-sm font-bold text-slate-700 truncate">
+                        {source.title || "External Intelligence Source"}
                       </span>
-                      <span className="text-xs text-slate-400 truncate font-mono">
+                      <span className="text-[10px] text-slate-400 uppercase tracking-wider font-mono">
                         {new URL(source.uri).hostname}
                       </span>
                     </div>
