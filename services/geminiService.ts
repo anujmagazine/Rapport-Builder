@@ -27,32 +27,34 @@ USER'S MEETING GOAL: ${goal}
 
 ## 🛡️ Intelligence Verification
 **Data Confidence:** [High / Medium / Low]
-**Reasoning:** (One concise line explaining the depth of the search results and identity certainty.)
+**Reasoning:** (One concise line explaining the depth of search results and identity certainty.)
 
 ## 📜 Professional Narrative
-(One high-signal paragraph synthesizing their career trajectory, focus areas, and current professional standing. No fluff.)
+(One high-signal, dense paragraph synthesizing their career trajectory and current standing. Max 4 sentences.)
 
 ## 🛠️ Competency & Leverage Matrix
+**CRITICAL: Ensure a blank line before and after the table below.**
+
 | Competency Area | Verified Proof | How to Leverage for "${goal}" | Conversation Opener/Hint |
 | :--- | :--- | :--- | :--- |
-| [Skill/Expertise] | [Role/Project] | [Strategic Advice] | "[Sample phrasing]" |
-| [Skill/Expertise] | [Role/Project] | [Strategic Advice] | "[Sample phrasing]" |
+| [Skill] | [Evidence] | [Strategy] | "[Exact Phrasing]" |
+| [Skill] | [Evidence] | [Strategy] | "[Exact Phrasing]" |
 
 ## 🧠 Psychographic Analysis & Buckets
-(Identify 1-2 specific personality "buckets" based strictly on their public persona and actions.)
-*   **Bucket: [Name of Profile Type]**
-    *   **The Evidence:** (Cite a specific post, interview, or decision)
-    *   **The Subject's Mindset:** (Deep insight into how they likely view their industry or role)
+(Identify 2 specific personality "buckets" based strictly on their public persona.)
+*   **Bucket: [Name]**
+    *   **The Evidence:** (Cite specific post/interview)
+    *   **The Subject's Mindset:** (How they likely view their world)
 
 ## 📔 Interaction Playbook
 ### The Communication Protocol
-*   **Speech Style:** (Direct? Collaborative? Socratic? Abstract?)
-*   **Energy Drivers:** (What topics or keywords excite them? Cite sources.)
-*   **Dislikes/Friction Points:** (What to avoid—e.g., long decks, small talk, buzzwords)
-*   **Expected Behavior:** (How will they likely behave in this meeting given your goal: "${goal}"?)
+*   **How to speak to them:** (Direct? Collaborative? Abstract?)
+*   **What topics energize them:** (Cite specific interests/drivers)
+*   **What they dislike:** (Friction points to avoid)
+*   **What to expect:** (Predicted behavior in this meeting)
 
 ## 🎯 Executive Recommendation
-One high-impact, actionable "North Star" piece of advice for this interaction.
+One high-impact, actionable "North Star" piece of advice.
 `;
 
   try {
