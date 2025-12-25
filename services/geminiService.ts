@@ -17,9 +17,9 @@ URL: ${url || "Search for verified professional footprint"}
 USER'S MEETING GOAL: ${goal}
 
 ### 🛑 STRICT INTEGRITY GUARDRAILS:
-1. **NO METADATA READING**: Do NOT deduce personality from URL IDs, profile photo presence, or account timestamps.
-2. **EVIDENCE-ONLY PSYCHOMETRICS**: You may categorize behavior into "buckets," but ONLY if you can cite specific evidence (e.g., "Based on 3 published articles on 'Disruptive Innovation' by ${name}, they fall into the 'Visionary Contrarian' bucket").
-3. **GOAL ALIGNMENT**: Every insight must answer: "How does this specific fact help achieve the goal: ${goal}?"
+1. **NO METADATA READING**: Do NOT deduce personality from URL IDs or profile timestamps.
+2. **EVIDENCE-ONLY PSYCHOMETRICS**: Categorize behavior into "buckets" ONLY if you can cite specific evidence.
+3. **GOAL ALIGNMENT**: Every insight must help achieve: ${goal}.
 
 ### REQUIRED REPORT STRUCTURE (Markdown):
 
@@ -27,34 +27,33 @@ USER'S MEETING GOAL: ${goal}
 
 ## 🛡️ Intelligence Verification
 **Data Confidence:** [High / Medium / Low]
-**Reasoning:** (One concise line explaining the depth of search results and identity certainty.)
+**Reasoning:** (One concise line explaining the search depth.)
 
 ## 📜 Professional Narrative
-(One high-signal, dense paragraph synthesizing their career trajectory and current standing. Max 4 sentences.)
+(One high-signal paragraph synthesizing their career focus. Max 4 sentences.)
 
 ## 🛠️ Competency & Leverage Matrix
-**CRITICAL: Ensure a blank line before and after the table below.**
 
 | Competency Area | Verified Proof | How to Leverage for "${goal}" | Conversation Opener/Hint |
 | :--- | :--- | :--- | :--- |
 | [Skill] | [Evidence] | [Strategy] | "[Exact Phrasing]" |
-| [Skill] | [Evidence] | [Strategy] | "[Exact Phrasing]" |
 
-## 🧠 Psychographic Analysis & Buckets
-(Identify 2 specific personality "buckets" based strictly on their public persona.)
-*   **Bucket: [Name]**
-    *   **The Evidence:** (Cite specific post/interview)
-    *   **The Subject's Mindset:** (How they likely view their world)
+## 🧠 Psychographic Analysis
+(Provide 2 "Buckets". Use the exact format below for each.)
+
+### Bucket: [Profile Name]
+*   **Proof Point:** (Specific evidence from their history)
+*   **Operational Mindset:** (How they process decisions)
 
 ## 📔 Interaction Playbook
-### The Communication Protocol
-*   **How to speak to them:** (Direct? Collaborative? Abstract?)
-*   **What topics energize them:** (Cite specific interests/drivers)
-*   **What they dislike:** (Friction points to avoid)
-*   **What to expect:** (Predicted behavior in this meeting)
+### Tactical Protocol
+*   **[SPEECH STYLE]:** (Direct? Collaborative? Abstract?)
+*   **[ENERGY DRIVERS]:** (What topics/keywords excite them? Cite sources.)
+*   **[FRICTION POINTS]:** (What they dislike or find annoying.)
+*   **[EXPECTED BEHAVIOR]:** (Predicted interaction style for this meeting.)
 
 ## 🎯 Executive Recommendation
-One high-impact, actionable "North Star" piece of advice.
+One high-impact piece of advice.
 `;
 
   try {
@@ -82,6 +81,6 @@ One high-impact, actionable "North Star" piece of advice.
     return { markdownContent, sources };
   } catch (error) {
     console.error("Gemini API Error:", error);
-    throw new Error("Strategic research was blocked or failed. Ensure the target has a public footprint or provide a direct link.");
+    throw new Error("Strategic research failed. Ensure the target has a public footprint.");
   }
 };
