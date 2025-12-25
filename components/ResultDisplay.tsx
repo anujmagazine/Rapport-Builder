@@ -3,7 +3,7 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ResearchResult } from "../types";
-import { ExternalLink, Download, Copy, BrainCircuit, Activity, ShieldCheck, Zap, FileText, AlertTriangle, CheckCircle2, BookOpen, Quote, ChevronRight, MessageSquare, Flame, Ban, Target } from "lucide-react";
+import { ExternalLink, Download, Copy, BrainCircuit, Activity, ShieldCheck, Zap, FileText, AlertTriangle, CheckCircle2, BookOpen, Quote, ChevronRight, MessageSquare, Flame, Ban, Target, Sparkles, Fingerprint } from "lucide-react";
 
 interface ResultDisplayProps {
   result: ResearchResult;
@@ -92,8 +92,8 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                 const text = String(children).toLowerCase();
                 const isVerification = text.includes("verification") || text.includes("data");
                 const isTimeline = text.includes("narrative") || text.includes("timeline");
-                const isBuckets = text.includes("psychographic") || text.includes("buckets");
-                const isPlaybook = text.includes("playbook");
+                const isBuckets = text.includes("psychographic") || text.includes("analysis");
+                const isPlaybook = text.includes("playbook") || text.includes("protocol");
                 const isMatrix = text.includes("matrix") || text.includes("competency");
                 
                 return (
@@ -120,10 +120,10 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                 const text = String(children);
                 if (text.toLowerCase().includes("bucket:")) {
                    return (
-                     <div className="mt-12 mb-6 bg-indigo-50/50 border-2 border-indigo-100 p-8 rounded-t-3xl border-b-0 break-inside-avoid">
+                     <div className="mt-12 mb-0 bg-indigo-50 border-2 border-indigo-100 p-8 rounded-t-3xl border-b-0 break-inside-avoid">
                         <div className="flex items-center gap-3 mb-3">
                           <BrainCircuit className="w-5 h-5 text-indigo-600" />
-                          <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em]">Profiling Bucket</span>
+                          <span className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.3em]">Profiling Aspect</span>
                         </div>
                         <h3 className="text-2xl font-black text-slate-900 m-0" {...props}>
                           {text.replace(/bucket:/gi, "").trim()}
@@ -170,14 +170,30 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                 const isEnergy = text.includes("[ENERGY DRIVERS]");
                 const isFriction = text.includes("[FRICTION POINTS]");
                 const isExpected = text.includes("[EXPECTED BEHAVIOR]");
+                
+                const isEssence = text.includes("The Essence:");
                 const isProof = text.includes("Proof Point:");
                 const isMindset = text.includes("Operational Mindset:");
+
+                if (isEssence) {
+                  return (
+                    <div className="p-8 bg-indigo-600 text-white border-x-2 border-indigo-100 break-inside-avoid shadow-sm group">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Sparkles className="w-4 h-4 text-indigo-200" />
+                        <span className="text-[9px] font-black uppercase tracking-[0.2em]">Core Identity</span>
+                      </div>
+                      <div className="text-lg font-bold leading-snug">
+                        {text.replace(/the essence:/gi, "").trim()}
+                      </div>
+                    </div>
+                  );
+                }
 
                 if (isProof || isMindset) {
                   return (
                     <div className={`p-6 bg-white border-2 border-indigo-100 border-t-0 last:rounded-b-3xl mb-0 break-inside-avoid shadow-sm group hover:bg-slate-50 transition-colors`}>
                       <span className="text-[9px] font-black text-indigo-400 uppercase tracking-[0.2em] block mb-1">
-                        {isProof ? "Evidence Base" : "Logic Flow"}
+                        {isProof ? "Evidence Base" : "Psychological Logic"}
                       </span>
                       <div className="text-slate-700 font-semibold leading-relaxed">
                         {text.replace(/proof point:|operational mindset:/gi, "").trim()}

@@ -39,11 +39,12 @@ USER'S MEETING GOAL: ${goal}
 | [Skill] | [Evidence] | [Strategy] | "[Exact Phrasing]" |
 
 ## 🧠 Psychographic Analysis
-(Provide 2 "Buckets". Use the exact format below for each.)
+(Provide 4-5 distinct "Buckets" based on their public footprint. Use the exact format below for each.)
 
 ### Bucket: [Profile Name]
-*   **Proof Point:** (Specific evidence from their history)
-*   **Operational Mindset:** (How they process decisions)
+*   **The Essence:** (A one-line definition in simple, plain language explaining what this profile name means)
+*   **Proof Point:** (Specific evidence from their history/published work)
+*   **Operational Mindset:** (How they process decisions in this state)
 
 ## 📔 Interaction Playbook
 ### Tactical Protocol
