@@ -10,44 +10,49 @@ export const generateResearchProfile = async (
   goal: string
 ): Promise<ResearchResult> => {
   const prompt = `
-You are a High-Level Communication Strategist.
+You are an Elite Strategic Intelligence Analyst. Your task is to provide a high-signal, evidence-based tactical briefing for a meeting with ${name}.
 
 TARGET: ${name}
-CONTEXT URL: ${url || "Search based on name and professional context"}
-RESEARCH GOAL: ${goal}
+URL: ${url || "Search for verified professional footprint"}
+USER'S MEETING GOAL: ${goal}
 
-INSTRUCTIONS:
-1. **Plain Language**: Use clear, everyday English. Avoid jargon like "synergy," "growth-mindset," or "value-add."
-2. **Layer 1: Objective Activity**: Scan for recent news, LinkedIn activity, and professional projects from the last 12-18 months.
-3. **Layer 2: Multi-Dimensional Psychographics**: Break their personality into 3-5 distinct "buckets." Use descriptive names (e.g., "The Rapid-Fire Thinker" instead of "High conscientiousness").
-4. **Layer 3: Interaction Playbook**: Create an actionable "How-to" guide for meeting this person based on their public character.
+### 🛑 STRICT INTEGRITY GUARDRAILS:
+1. **NO METADATA READING**: Do NOT deduce personality from URL IDs, profile photo presence, or account timestamps.
+2. **EVIDENCE-ONLY PSYCHOMETRICS**: You may categorize behavior into "buckets," but ONLY if you can cite specific evidence (e.g., "Based on 3 published articles on 'Disruptive Innovation' by ${name}, they fall into the 'Visionary Contrarian' bucket").
+3. **GOAL ALIGNMENT**: Every insight must answer: "How does this specific fact help achieve the goal: ${goal}?"
 
-MANDATORY OUTPUT STRUCTURE (Markdown):
+### REQUIRED REPORT STRUCTURE (Markdown):
 
-# Insight Profile: ${name}
+# Tactical Briefing: ${name}
 
-## Executive Summary
-**Strategic Context:** (How this person aligns with: "${goal}")
-**The Persona:** (A 2-sentence summary of who they are publicly)
+## 🛡️ Intelligence Verification
+**Data Confidence:** [High / Medium / Low]
+**Reasoning:** (One concise line explaining the depth of the search results and identity certainty.)
 
-## 1. Digital Footprint
-(List 3 specific, recent actions/news points. Explain why each matters to you in plain terms.)
+## 📜 Professional Narrative
+(One high-signal paragraph synthesizing their career trajectory, focus areas, and current professional standing. No fluff.)
 
-## 2. The Personality Spectrum
-(Define 3-5 Buckets)
+## 🛠️ Competency & Leverage Matrix
+| Competency Area | Verified Proof | How to Leverage for "${goal}" | Conversation Opener/Hint |
+| :--- | :--- | :--- | :--- |
+| [Skill/Expertise] | [Role/Project] | [Strategic Advice] | "[Sample phrasing]" |
+| [Skill/Expertise] | [Role/Project] | [Strategic Advice] | "[Sample phrasing]" |
 
-### Bucket: [Name]
-* **The Trait:** [Description]
-* **The Evidence:** [Based on their activity]
-* **Why it Matters:** [How to use this knowledge]
+## 🧠 Psychographic Analysis & Buckets
+(Identify 1-2 specific personality "buckets" based strictly on their public persona and actions.)
+*   **Bucket: [Name of Profile Type]**
+    *   **The Evidence:** (Cite a specific post, interview, or decision)
+    *   **The Subject's Mindset:** (Deep insight into how they likely view their industry or role)
 
-## 3. Meeting Playbook (Actionable)
-*   **The Best Approach:** (How to start the meeting)
-*   **What Energizes Them:** (Topics/Styles to use)
-*   **What Irritates Them:** (Behavioral friction to avoid)
+## 📔 Interaction Playbook
+### The Communication Protocol
+*   **Speech Style:** (Direct? Collaborative? Socratic? Abstract?)
+*   **Energy Drivers:** (What topics or keywords excite them? Cite sources.)
+*   **Dislikes/Friction Points:** (What to avoid—e.g., long decks, small talk, buzzwords)
+*   **Expected Behavior:** (How will they likely behave in this meeting given your goal: "${goal}"?)
 
-## 4. Closing Insight
-One simple piece of advice that makes an interaction with ${name} successful.
+## 🎯 Executive Recommendation
+One high-impact, actionable "North Star" piece of advice for this interaction.
 `;
 
   try {
@@ -56,11 +61,11 @@ One simple piece of advice that makes an interaction with ${name} successful.
       contents: prompt,
       config: {
         tools: [{ googleSearch: {} }],
-        thinkingConfig: { thinkingBudget: 4000 }
+        thinkingConfig: { thinkingBudget: 8000 }
       },
     });
 
-    const markdownContent = response.text || "Analysis could not be generated.";
+    const markdownContent = response.text || "Strategic audit failed to generate.";
     const sources: { uri: string; title: string }[] = [];
     const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
 
@@ -75,6 +80,6 @@ One simple piece of advice that makes an interaction with ${name} successful.
     return { markdownContent, sources };
   } catch (error) {
     console.error("Gemini API Error:", error);
-    throw new Error("Search timed out. Please try again in a moment.");
+    throw new Error("Strategic research was blocked or failed. Ensure the target has a public footprint or provide a direct link.");
   }
 };

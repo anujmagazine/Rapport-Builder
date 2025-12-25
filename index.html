@@ -30,41 +30,41 @@
       ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
       ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-      /* PRINT STYLES - ENGINEERED FOR PDF RELIABILITY */
+      /* PRINT STYLES - ENGINEERED FOR MAXIMUM PDF COMPATIBILITY */
       @media print {
         @page {
-          margin: 2cm;
-          size: A4 vertical;
+          margin: 1.5cm;
+          size: A4 portrait;
         }
         
-        /* Hide all UI elements */
-        nav, header, footer, .no-print, button, [role="button"], .sticky, .fixed, .no-export, .alert, .source-card-icon {
+        /* Eliminate all non-essential UI */
+        nav, header, footer, .no-print, button, [role="button"], .sticky, .fixed, .no-export, .alert, .source-card-icon, [aria-hidden="true"] {
           display: none !important;
           visibility: hidden !important;
           height: 0 !important;
+          width: 0 !important;
           margin: 0 !important;
           padding: 0 !important;
+          position: absolute !important;
         }
 
-        /* Reset layout for print engines (Chrome/Safari/Firefox) */
-        html, body {
+        /* Force layout reset to avoid clipping in PDF engines */
+        html, body, #root, main {
           background-color: white !important;
           color: #000 !important;
           width: 100% !important;
           height: auto !important;
+          min-height: 0 !important;
           overflow: visible !important;
           display: block !important;
           position: static !important;
-        }
-
-        #root, main {
-          display: block !important;
-          width: 100% !important;
           margin: 0 !important;
           padding: 0 !important;
-          background: white !important;
+          box-shadow: none !important;
+          transform: none !important;
         }
 
+        /* Ensure the content container fills the page */
         .print-container {
           box-shadow: none !important;
           border: none !important;
@@ -72,6 +72,7 @@
           display: block !important;
           margin: 0 !important;
           padding: 0 !important;
+          overflow: visible !important;
         }
 
         .print-content {
@@ -82,26 +83,27 @@
           display: block !important;
         }
 
-        /* Typographic clean-up */
+        /* Typography optimizations for printed ink/PDF */
         .prose {
-          color: black !important;
+          color: #111 !important;
           font-size: 11pt !important;
-          line-height: 1.5 !important;
+          line-height: 1.6 !important;
           max-width: none !important;
         }
         
         h1, h2, h3, h4 { 
-          color: black !important;
+          color: #000 !important;
           page-break-after: avoid; 
           break-after: avoid; 
         }
 
-        /* Prevent ugly breaks in sections */
-        section, .insight-section, li, p {
+        /* Intelligent breaks */
+        section, .insight-section, li, p, blockquote {
           page-break-inside: avoid;
           break-inside: avoid;
         }
 
+        /* Ensure background colors/borders show up in the PDF */
         * {
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;

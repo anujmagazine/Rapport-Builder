@@ -2,7 +2,7 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import { ResearchResult } from "../types";
-import { ExternalLink, Download, Copy, BrainCircuit, Activity, ShieldCheck, Zap, FileText, Info } from "lucide-react";
+import { ExternalLink, Download, Copy, BrainCircuit, Activity, ShieldCheck, Zap, FileText, AlertTriangle, CheckCircle2, BookOpen, Quote } from "lucide-react";
 
 interface ResultDisplayProps {
   result: ResearchResult;
@@ -12,19 +12,14 @@ interface ResultDisplayProps {
 export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) => {
   const handleCopy = () => {
     navigator.clipboard.writeText(result.markdownContent);
-    alert("Insight profile copied to clipboard!");
+    alert("Tactical briefing copied to clipboard!");
   };
 
   const handleExportPDF = () => {
-    // 1. Force focus to window
     window.focus();
-    
-    // 2. Small delay to ensure all React state/animations have settled
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        window.print();
-      }, 750);
-    });
+    setTimeout(() => {
+      window.print();
+    }, 500);
   };
 
   const handleDownloadMD = () => {
@@ -32,7 +27,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `People_Insight_Profile.md`;
+    a.download = `Tactical_Briefing.md`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -41,13 +36,13 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
 
   return (
     <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden print-container transition-all">
-      {/* Action Toolbar - Hidden in Print */}
-      <div className="bg-slate-900 px-6 py-4 flex justify-between items-center sticky top-[72px] z-40 text-white no-print">
+      {/* Action Toolbar */}
+      <div className="bg-slate-900 px-6 py-4 flex justify-between items-center sticky top-[72px] z-40 text-white no-print shadow-lg">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2.5">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <h2 className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-300">
-              Insight Generated
+              High-Signal Intelligence
             </h2>
           </div>
         </div>
@@ -65,7 +60,6 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
             type="button"
             onClick={handleDownloadMD}
             className="flex items-center gap-2 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all"
-            title="Download Raw Markdown"
           >
             <FileText className="w-4 h-4" />
             MD
@@ -81,68 +75,110 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
         </div>
       </div>
 
+      {/* Accuracy Disclaimer */}
+      <div className="bg-indigo-50/50 border-b border-indigo-100 px-8 py-4 flex items-start gap-4 no-print">
+        <ShieldCheck className="w-5 h-5 text-indigo-600 flex-shrink-0 mt-0.5" />
+        <div className="text-[11px] text-indigo-900 leading-relaxed font-bold uppercase tracking-wider">
+          Forensic Strategic Audit: Strictly based on published evidence. No metadata-driven hallucinations.
+        </div>
+      </div>
+
       {/* Main Insight Content */}
-      <div className="p-8 md:p-20 max-w-[80ch] mx-auto bg-white print-content">
+      <div className="p-8 md:p-20 max-w-[95ch] mx-auto bg-white print-content">
         <article className="prose prose-slate max-w-none">
           <ReactMarkdown
             components={{
               h1: ({ node, ...props }) => (
                 <div className="mb-16 pb-12 border-b-[8px] border-slate-900">
-                  <span className="text-[11px] font-black text-indigo-600 uppercase tracking-[0.4em] block mb-4">Internal Insight Profile</span>
-                  <h1 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight leading-[1.1] m-0" {...props} />
+                  <span className="text-[11px] font-black text-indigo-600 uppercase tracking-[0.4em] block mb-4">Tactical Intelligence Briefing</span>
+                  <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-[1.1] m-0" {...props} />
                 </div>
               ),
               h2: ({ node, children, ...props }) => {
                 const text = String(children).toLowerCase();
-                const isPlaybook = text.includes("playbook") || text.includes("interaction");
-                const isPsych = text.includes("spectrum") || text.includes("buckets") || text.includes("psychographic");
-                const isActivity = text.includes("footprint") || text.includes("activity");
-                const isSummary = text.includes("summary");
+                const isVerification = text.includes("verification") || text.includes("data");
+                const isTimeline = text.includes("narrative") || text.includes("timeline");
+                const isBuckets = text.includes("psychographic") || text.includes("buckets");
+                const isPlaybook = text.includes("playbook");
+                const isMatrix = text.includes("matrix") || text.includes("competency");
                 
                 return (
                   <h2 
-                    className={`text-xl font-black uppercase tracking-[0.2em] mt-20 mb-10 flex items-center gap-4 p-6 rounded-2xl border-2 ${
-                      isPlaybook ? "bg-amber-50 text-amber-900 border-amber-100" : 
-                      isPsych ? "bg-indigo-50 text-indigo-900 border-indigo-100" : 
-                      isActivity ? "bg-slate-900 text-white border-slate-900" :
-                      isSummary ? "bg-slate-50 text-slate-900 border-slate-200" :
-                      "text-slate-900 border-slate-100 bg-slate-50"
+                    className={`text-xl font-black uppercase tracking-[0.2em] mt-20 mb-10 flex items-center gap-4 p-6 rounded-2xl border-2 break-inside-avoid ${
+                      isVerification ? "bg-emerald-50 text-emerald-900 border-emerald-100" :
+                      isBuckets ? "bg-indigo-900 text-white border-indigo-900" :
+                      isPlaybook ? "bg-amber-50 text-amber-900 border-amber-100" :
+                      isMatrix ? "bg-slate-900 text-white border-slate-900" :
+                      "bg-slate-50 text-slate-900 border-slate-200"
                     }`} 
                     {...props}
                   >
-                    {isPlaybook && <Zap className="w-6 h-6 text-amber-500 no-print" />}
-                    {isActivity && <Activity className="w-6 h-6 text-indigo-400 no-print" />}
-                    {isPsych && <BrainCircuit className="w-6 h-6 no-print" />}
+                    {isVerification && <ShieldCheck className="w-6 h-6 no-print" />}
+                    {isTimeline && <Activity className="w-6 h-6 no-print" />}
+                    {isBuckets && <BrainCircuit className="w-6 h-6 no-print text-indigo-300" />}
+                    {isPlaybook && <BookOpen className="w-6 h-6 no-print text-amber-500" />}
+                    {isMatrix && <Zap className="w-6 h-6 no-print text-amber-400" />}
                     {children}
                   </h2>
                 );
               },
               h3: ({ node, ...props }) => (
-                <h3 className="text-xl font-black text-slate-800 mt-12 mb-6 border-b-2 border-slate-100 pb-2" {...props} />
+                <h3 className="text-lg font-black text-slate-800 mt-12 mb-6 border-b-2 border-slate-100 pb-2 flex items-center gap-2 break-inside-avoid" {...props} />
               ),
-              p: ({ node, ...props }) => (
-                <p className="text-[18px] leading-[1.8] text-slate-700 mb-8 font-medium" {...props} />
+              p: ({ node, ...props }) => {
+                const text = String(props.children);
+                if (text.includes("Data Confidence:")) {
+                   return (
+                     <div className="flex items-center gap-3 bg-white border-2 border-slate-100 p-4 rounded-xl mb-6 shadow-sm">
+                       <span className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">Confidence</span>
+                       <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                         text.includes("High") ? "bg-emerald-500 text-white" :
+                         text.includes("Medium") ? "bg-amber-500 text-white" :
+                         "bg-red-500 text-white"
+                       }`}>
+                         {text.split(":")[1].trim().split(" ")[0]}
+                       </span>
+                       <span className="text-sm font-medium text-slate-600 italic">
+                         {text.includes("-") ? text.split("-")[1].trim() : ""}
+                       </span>
+                     </div>
+                   );
+                }
+                return <p className="text-[17px] leading-[1.8] text-slate-700 mb-8 font-medium" {...props} />;
+              },
+              table: ({ node, ...props }) => (
+                <div className="my-10 overflow-hidden border border-slate-200 rounded-2xl shadow-sm break-inside-avoid">
+                  <table className="min-w-full divide-y divide-slate-200" {...props} />
+                </div>
               ),
-              ul: ({ node, ...props }) => (
-                <ul className="space-y-4 mb-10 list-none pl-0" {...props} />
-              ),
+              thead: ({ node, ...props }) => <thead className="bg-slate-50" {...props} />,
+              th: ({ node, ...props }) => <th className="px-6 py-4 text-left text-[10px] font-black text-slate-500 uppercase tracking-widest" {...props} />,
+              td: ({ node, ...props }) => <td className="px-6 py-4 text-sm text-slate-600 border-t border-slate-100 align-top leading-relaxed" {...props} />,
               li: ({ node, children, ...props }) => {
-                const text = String(children).toLowerCase();
-                const isNegative = text.includes("avoid") || text.includes("friction") || text.includes("irritate");
-                const isAction = text.includes("best approach") || text.includes("how to") || text.includes("energize");
+                const text = String(children);
+                const isSpeech = text.toLowerCase().includes("speech style");
+                const isEnergy = text.toLowerCase().includes("energy drivers");
+                const isDislike = text.toLowerCase().includes("dislike");
                 
                 return (
-                  <li className={`p-6 rounded-2xl border-l-8 leading-relaxed shadow-sm transition-all hover:translate-x-1 ${
-                    isNegative ? "bg-red-50/50 border-red-500 text-red-950" : 
-                    isAction ? "bg-emerald-50/50 border-emerald-500 text-emerald-950" :
-                    "bg-white border-slate-200 text-slate-700"
-                  }`} {...props}>
-                    {children}
+                  <li className={`p-6 rounded-2xl border-l-8 leading-relaxed shadow-sm break-inside-avoid bg-white border-slate-200 text-slate-700 mb-4 transition-all hover:border-slate-400 group`}>
+                    <div className="flex flex-col gap-1">
+                      {isSpeech && <span className="text-[9px] font-black text-indigo-600 uppercase tracking-widest">Acoustic Preference</span>}
+                      {isEnergy && <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest">Motivation Catalyst</span>}
+                      {isDislike && <span className="text-[9px] font-black text-rose-600 uppercase tracking-widest">Hazard Warning</span>}
+                      <div className="font-bold text-slate-900 mb-1">{children}</div>
+                    </div>
                   </li>
                 );
               },
+              blockquote: ({ node, ...props }) => (
+                <blockquote className="border-l-4 border-indigo-600 bg-indigo-50/30 p-8 my-8 rounded-r-2xl italic text-indigo-950 font-medium relative" {...props}>
+                  <Quote className="absolute top-2 right-4 w-12 h-12 text-indigo-200 opacity-50" />
+                  {props.children}
+                </blockquote>
+              ),
               strong: ({ node, ...props }) => (
-                <strong className="font-black text-slate-900 bg-indigo-50/50 px-1" {...props} />
+                <strong className="font-black text-slate-900 bg-slate-100/80 px-1" {...props} />
               )
             }}
           >
@@ -150,12 +186,12 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
           </ReactMarkdown>
         </article>
 
-        {/* Sources - Styled for PDF clarity */}
+        {/* Sources */}
         {result.sources && result.sources.length > 0 && (
-          <div className="mt-32 pt-16 border-t-2 border-slate-100">
+          <div className="mt-32 pt-16 border-t-2 border-slate-100 break-inside-avoid">
             <div className="mb-10">
-              <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2">Metadata Verification</h4>
-              <h3 className="text-2xl font-black text-slate-900">Intelligence Sources</h3>
+              <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-2">Evidence Index</h4>
+              <h3 className="text-2xl font-black text-slate-900">Verified Footprint</h3>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -165,16 +201,16 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                   href={source.uri}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-100 hover:border-indigo-600 transition-all group overflow-hidden"
+                  className="flex items-center gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-100 group overflow-hidden break-inside-avoid transition-all hover:bg-white hover:border-indigo-600 hover:shadow-xl"
                 >
-                  <div className="bg-white p-3 rounded-xl shadow-sm source-card-icon no-print">
-                    <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-indigo-600" />
+                  <div className="bg-white p-3 rounded-xl shadow-sm source-card-icon no-print group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                    <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-white" />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-sm font-bold text-slate-800 truncate leading-tight">
+                    <p className="text-sm font-bold text-slate-800 truncate leading-tight group-hover:text-indigo-600">
                       {source.title || "Public Intelligence Point"}
                     </p>
-                    <p className="text-[10px] text-indigo-600 font-bold uppercase tracking-tight mt-1 opacity-70">
+                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight mt-1 opacity-70">
                       {new URL(source.uri).hostname}
                     </p>
                   </div>
@@ -186,9 +222,9 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
       </div>
       
       {/* Visual Footer in PDF */}
-      <div className="hidden print:block text-center py-12 border-t border-slate-100">
+      <div className="hidden print:block text-center py-12 border-t border-slate-100 mt-20">
         <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.5em]">
-          Generated by People Insight Generator • Confidence for Every Interaction
+          Tactical Briefing • Generated by People Insight • Strictly Evidence-Based
         </p>
       </div>
     </div>
