@@ -1,4 +1,3 @@
-
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -21,11 +20,8 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
   };
 
   const handleExportPDF = () => {
-    // Some browsers block print() if called during a state update or animation.
-    // Use a tiny timeout to ensure the UI is idle and visible.
-    setTimeout(() => {
-      window.print();
-    }, 100);
+    // Explicitly call print. The index.html CSS handles the "PDF" formatting
+    window.print();
   };
 
   const handleDownloadMD = () => {
@@ -44,12 +40,13 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
     }
   };
 
-  // Helper to safely get text from React children
+  // Improved, more robust text extractor for React nodes
   const getChildText = (children: any): string => {
-    if (typeof children === 'string') return children;
+    if (!children) return "";
+    if (typeof children === 'string' || typeof children === 'number') return String(children);
     if (Array.isArray(children)) return children.map(getChildText).join('');
     if (children?.props?.children) return getChildText(children.props.children);
-    return String(children || "");
+    return "";
   };
 
   return (
@@ -87,7 +84,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
              type="button"
              onClick={handleExportPDF}
              className="flex items-center gap-2 px-5 py-2 text-[10px] font-black uppercase tracking-widest text-white bg-indigo-600 rounded-xl hover:bg-indigo-500 transition-colors shadow-lg active:scale-95"
-             title="Open Print Menu (Select 'Save as PDF' as the Destination)"
+             title="Print to PDF"
           >
             <Download className="w-4 h-4" />
             Export PDF
@@ -209,7 +206,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
 
                 if (isProof || isMindset) {
                   return (
-                    <div className="p-6 bg-white border-2 border-indigo-100 border-t-0 last:rounded-b-3xl mb-0 break-inside-avoid shadow-sm group hover:bg-slate-50 transition-colors">
+                    <div className="p-6 bg-white border-2 border-indigo-100 border-t-0 last:rounded-b-3xl mb-0 break-inside-avoid shadow-sm">
                       <span className="text-[9px] font-black text-indigo-400 uppercase tracking-[0.2em] block mb-1">
                         {isProof ? "Evidence Base" : "Psychological Logic"}
                       </span>
@@ -222,7 +219,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
 
                 if (isSpeech || isEnergy || isFriction || isExpected) {
                   return (
-                    <div className={`p-8 rounded-3xl mb-6 shadow-sm flex items-start gap-6 break-inside-avoid border-2 transition-all hover:shadow-md ${
+                    <div className={`p-8 rounded-3xl mb-6 shadow-sm flex items-start gap-6 break-inside-avoid border-2 ${
                       isSpeech ? "bg-indigo-50 border-indigo-100" :
                       isEnergy ? "bg-emerald-50 border-emerald-100" :
                       isFriction ? "bg-rose-50 border-rose-100" :
@@ -290,7 +287,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                   href={source.uri}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-100 group transition-all hover:bg-white hover:border-indigo-600 hover:shadow-xl"
+                  className="flex items-center gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-100 group hover:border-indigo-600 transition-colors"
                 >
                   <div className="bg-white p-3 rounded-xl shadow-sm group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                     <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-white" />

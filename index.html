@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -30,14 +29,14 @@
       ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
       ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-      /* PRINT ENGINE OPTIMIZATION */
+      /* CRITICAL PRINT STYLES - FIXES BLANK PDF ISSUE */
       @media print {
         @page {
           margin: 1.5cm;
           size: A4 portrait;
         }
         
-        /* Force everything to be visible and non-animated */
+        /* 1. Force ALL content to be visible, regardless of JS-driven animations */
         * {
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
@@ -46,45 +45,54 @@
           transform: none !important;
           opacity: 1 !important;
           visibility: visible !important;
+          box-shadow: none !important;
         }
 
-        /* Clean up non-report UI */
-        nav, header, footer, .no-print, button, .action-toolbar, .no-export {
+        /* 2. Remove UI elements that shouldn't be in a report */
+        header, nav, footer, .no-print, button, [role="button"], .action-toolbar {
           display: none !important;
+          visibility: hidden !important;
           height: 0 !important;
-          overflow: hidden !important;
+          margin: 0 !important;
+          padding: 0 !important;
         }
 
-        /* Ensure main flow is unconstrained */
+        /* 3. Reset layout constraints that cause blank pages */
         html, body, #root, main {
           background: white !important;
           width: 100% !important;
           height: auto !important;
+          min-height: 0 !important;
           overflow: visible !important;
           display: block !important;
           position: static !important;
         }
 
         .print-container {
-          box-shadow: none !important;
-          border: none !important;
-          overflow: visible !important;
-          width: 100% !important;
           display: block !important;
+          width: 100% !important;
+          max-width: none !important;
+          border: none !important;
+          padding: 0 !important;
+          margin: 0 !important;
         }
 
         .print-content {
+          display: block !important;
           padding: 0 !important;
           margin: 0 auto !important;
           width: 100% !important;
-          display: block !important;
+          max-width: 100% !important;
         }
 
-        /* Avoid breaking cards/sections across pages where possible */
-        .break-inside-avoid, table, tr, li, h2, h3 {
+        /* 4. Page Break Management */
+        h1, h2, h3 { page-break-after: avoid; break-after: avoid; }
+        section, table, tr, li, .break-inside-avoid {
           page-break-inside: avoid !important;
           break-inside: avoid !important;
         }
+        
+        img, canvas { max-width: 100% !important; }
       }
     </style>
   <script type="importmap">
