@@ -3,7 +3,7 @@ import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { ResearchResult } from "../types";
-import { ExternalLink, Download, Copy, BrainCircuit, Activity, ShieldCheck, Zap, FileText, AlertTriangle, CheckCircle2, BookOpen, Quote, ChevronRight, MessageSquare, Flame, Ban, Target, Sparkles, Fingerprint } from "lucide-react";
+import { ExternalLink, Download, Copy, BrainCircuit, Activity, ShieldCheck, Zap, FileText, BookOpen, Quote, ChevronRight, MessageSquare, Flame, Ban, Target, Sparkles } from "lucide-react";
 
 interface ResultDisplayProps {
   result: ResearchResult;
@@ -12,33 +12,50 @@ interface ResultDisplayProps {
 
 export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) => {
   const handleCopy = () => {
-    navigator.clipboard.writeText(result.markdownContent);
-    alert("Tactical briefing copied to clipboard!");
+    try {
+      navigator.clipboard.writeText(result.markdownContent);
+      alert("Tactical briefing copied to clipboard!");
+    } catch (err) {
+      console.error("Copy failed", err);
+    }
   };
 
   const handleExportPDF = () => {
-    window.focus();
+    // Some browsers block print() if called during a state update or animation.
+    // Use a tiny timeout to ensure the UI is idle and visible.
     setTimeout(() => {
       window.print();
-    }, 500);
+    }, 100);
   };
 
   const handleDownloadMD = () => {
-    const blob = new Blob([result.markdownContent], { type: "text/markdown" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `Tactical_Briefing.md`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    try {
+      const blob = new Blob([result.markdownContent], { type: "text/markdown" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Tactical_Briefing.md`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Download failed", err);
+    }
+  };
+
+  // Helper to safely get text from React children
+  const getChildText = (children: any): string => {
+    if (typeof children === 'string') return children;
+    if (Array.isArray(children)) return children.map(getChildText).join('');
+    if (children?.props?.children) return getChildText(children.props.children);
+    return String(children || "");
   };
 
   return (
-    <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden print-container transition-all">
+    <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-visible print-container">
       {/* Action Toolbar */}
-      <div className="bg-slate-900 px-6 py-4 flex justify-between items-center sticky top-[72px] z-40 text-white no-print shadow-lg">
+      <div className="bg-slate-900 px-6 py-4 flex justify-between items-center sticky top-[72px] z-40 text-white no-print shadow-lg action-toolbar">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2.5">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
@@ -52,7 +69,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
           <button
             type="button"
             onClick={handleCopy}
-            className="p-2.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all"
+            className="p-2.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-colors"
             title="Copy Text"
           >
             <Copy className="w-4 h-4" />
@@ -60,7 +77,8 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
           <button
             type="button"
             onClick={handleDownloadMD}
-            className="flex items-center gap-2 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-all"
+            className="flex items-center gap-2 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-colors"
+            title="Download as Markdown"
           >
             <FileText className="w-4 h-4" />
             MD
@@ -68,7 +86,8 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
           <button
              type="button"
              onClick={handleExportPDF}
-             className="flex items-center gap-2 px-5 py-2 text-[10px] font-black uppercase tracking-widest text-white bg-indigo-600 rounded-xl hover:bg-indigo-500 transition-all shadow-lg active:scale-95"
+             className="flex items-center gap-2 px-5 py-2 text-[10px] font-black uppercase tracking-widest text-white bg-indigo-600 rounded-xl hover:bg-indigo-500 transition-colors shadow-lg active:scale-95"
+             title="Open Print Menu (Select 'Save as PDF' as the Destination)"
           >
             <Download className="w-4 h-4" />
             Export PDF
@@ -89,7 +108,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                 </div>
               ),
               h2: ({ node, children, ...props }) => {
-                const text = String(children).toLowerCase();
+                const text = getChildText(children).toLowerCase();
                 const isVerification = text.includes("verification") || text.includes("data");
                 const isTimeline = text.includes("narrative") || text.includes("timeline");
                 const isBuckets = text.includes("psychographic") || text.includes("analysis");
@@ -117,7 +136,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                 );
               },
               h3: ({ node, children, ...props }) => {
-                const text = String(children);
+                const text = getChildText(children);
                 if (text.toLowerCase().includes("bucket:")) {
                    return (
                      <div className="mt-12 mb-0 bg-indigo-50 border-2 border-indigo-100 p-8 rounded-t-3xl border-b-0 break-inside-avoid">
@@ -133,8 +152,8 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                 }
                 return <h3 className="text-lg font-black text-slate-800 mt-12 mb-6 border-b-2 border-slate-100 pb-2 flex items-center gap-2 break-inside-avoid" {...props} />;
               },
-              p: ({ node, ...props }) => {
-                const text = String(props.children);
+              p: ({ node, children, ...props }) => {
+                const text = getChildText(children);
                 if (text.includes("Data Confidence:")) {
                    return (
                      <div className="flex items-center gap-3 bg-white border-2 border-slate-100 p-4 rounded-xl mb-12 shadow-sm break-inside-avoid">
@@ -144,7 +163,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                          text.includes("Medium") ? "bg-amber-500 text-white" :
                          "bg-red-500 text-white"
                        }`}>
-                         {text.split(":")[1].trim().split(" ")[0]}
+                         {text.split(":")[1]?.trim().split(" ")[0] || "N/A"}
                        </span>
                        <span className="text-xs font-bold text-slate-500 italic ml-2">
                          {text.includes("Reasoning") ? text.split("Reasoning:")[1]?.trim() : text.split(":")[1]?.trim()}
@@ -152,7 +171,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                      </div>
                    );
                 }
-                return <p className="text-[17px] leading-[1.8] text-slate-700 mb-8 font-medium" {...props} />;
+                return <p className="text-[17px] leading-[1.8] text-slate-700 mb-8 font-medium" {...props}>{children}</p>;
               },
               table: ({ node, ...props }) => (
                 <div className="my-12 overflow-x-auto border border-slate-200 rounded-2xl shadow-sm bg-white break-inside-avoid">
@@ -163,9 +182,8 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
               th: ({ node, ...props }) => <th className="px-6 py-4 text-left text-[10px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200" {...props} />,
               td: ({ node, ...props }) => <td className="px-6 py-5 text-sm text-slate-600 border-b border-slate-100 align-top leading-relaxed font-medium" {...props} />,
               li: ({ node, children, ...props }) => {
-                const text = String(children);
+                const text = getChildText(children);
                 
-                // Detection for Tactical Tags
                 const isSpeech = text.includes("[SPEECH STYLE]");
                 const isEnergy = text.includes("[ENERGY DRIVERS]");
                 const isFriction = text.includes("[FRICTION POINTS]");
@@ -177,7 +195,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
 
                 if (isEssence) {
                   return (
-                    <div className="p-8 bg-indigo-600 text-white border-x-2 border-indigo-100 break-inside-avoid shadow-sm group">
+                    <div className="p-8 bg-indigo-600 text-white border-x-2 border-indigo-100 break-inside-avoid shadow-sm">
                       <div className="flex items-center gap-2 mb-2">
                         <Sparkles className="w-4 h-4 text-indigo-200" />
                         <span className="text-[9px] font-black uppercase tracking-[0.2em]">Core Identity</span>
@@ -191,7 +209,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
 
                 if (isProof || isMindset) {
                   return (
-                    <div className={`p-6 bg-white border-2 border-indigo-100 border-t-0 last:rounded-b-3xl mb-0 break-inside-avoid shadow-sm group hover:bg-slate-50 transition-colors`}>
+                    <div className="p-6 bg-white border-2 border-indigo-100 border-t-0 last:rounded-b-3xl mb-0 break-inside-avoid shadow-sm group hover:bg-slate-50 transition-colors">
                       <span className="text-[9px] font-black text-indigo-400 uppercase tracking-[0.2em] block mb-1">
                         {isProof ? "Evidence Base" : "Psychological Logic"}
                       </span>

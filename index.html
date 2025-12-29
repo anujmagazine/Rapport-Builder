@@ -30,83 +30,60 @@
       ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
       ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-      /* PRINT STYLES - ENGINEERED FOR MAXIMUM PDF COMPATIBILITY */
+      /* PRINT ENGINE OPTIMIZATION */
       @media print {
         @page {
           margin: 1.5cm;
           size: A4 portrait;
         }
         
-        /* Eliminate all non-essential UI */
-        nav, header, footer, .no-print, button, [role="button"], .sticky, .fixed, .no-export, .alert, .source-card-icon, [aria-hidden="true"] {
-          display: none !important;
-          visibility: hidden !important;
-          height: 0 !important;
-          width: 0 !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          position: absolute !important;
-        }
-
-        /* Force layout reset to avoid clipping in PDF engines */
-        html, body, #root, main {
-          background-color: white !important;
-          color: #000 !important;
-          width: 100% !important;
-          height: auto !important;
-          min-height: 0 !important;
-          overflow: visible !important;
-          display: block !important;
-          position: static !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          box-shadow: none !important;
-          transform: none !important;
-        }
-
-        /* Ensure the content container fills the page */
-        .print-container {
-          box-shadow: none !important;
-          border: none !important;
-          width: 100% !important;
-          display: block !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          overflow: visible !important;
-        }
-
-        .print-content {
-          width: 100% !important;
-          max-width: none !important;
-          padding: 0 !important;
-          margin: 0 !important;
-          display: block !important;
-        }
-
-        /* Typography optimizations for printed ink/PDF */
-        .prose {
-          color: #111 !important;
-          font-size: 11pt !important;
-          line-height: 1.6 !important;
-          max-width: none !important;
-        }
-        
-        h1, h2, h3, h4 { 
-          color: #000 !important;
-          page-break-after: avoid; 
-          break-after: avoid; 
-        }
-
-        /* Intelligent breaks */
-        section, .insight-section, li, p, blockquote {
-          page-break-inside: avoid;
-          break-inside: avoid;
-        }
-
-        /* Ensure background colors/borders show up in the PDF */
+        /* Force everything to be visible and non-animated */
         * {
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
+          animation: none !important;
+          transition: none !important;
+          transform: none !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+        }
+
+        /* Clean up non-report UI */
+        nav, header, footer, .no-print, button, .action-toolbar, .no-export {
+          display: none !important;
+          height: 0 !important;
+          overflow: hidden !important;
+        }
+
+        /* Ensure main flow is unconstrained */
+        html, body, #root, main {
+          background: white !important;
+          width: 100% !important;
+          height: auto !important;
+          overflow: visible !important;
+          display: block !important;
+          position: static !important;
+        }
+
+        .print-container {
+          box-shadow: none !important;
+          border: none !important;
+          overflow: visible !important;
+          width: 100% !important;
+          display: block !important;
+        }
+
+        .print-content {
+          padding: 0 !important;
+          margin: 0 auto !important;
+          width: 100% !important;
+          display: block !important;
+        }
+
+        /* Avoid breaking cards/sections across pages where possible */
+        .break-inside-avoid, table, tr, li, h2, h3 {
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
         }
       }
     </style>

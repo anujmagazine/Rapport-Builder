@@ -34,9 +34,13 @@ USER'S MEETING GOAL: ${goal}
 
 ## 🛠️ Competency & Leverage Matrix
 
+**CRITICAL: ENSURE AT LEAST TWO BLANK LINES BEFORE STARTING THE TABLE BELOW.**
+
+
 | Competency Area | Verified Proof | How to Leverage for "${goal}" | Conversation Opener/Hint |
 | :--- | :--- | :--- | :--- |
 | [Skill] | [Evidence] | [Strategy] | "[Exact Phrasing]" |
+
 
 ## 🧠 Psychographic Analysis
 (Provide 4-5 distinct "Buckets" based on their public footprint. Use the exact format below for each.)
