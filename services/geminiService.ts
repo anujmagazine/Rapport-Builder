@@ -1,5 +1,5 @@
 
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, ThinkingLevel } from "@google/genai";
 import { ResearchResult } from "../types";
 
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -9,69 +9,83 @@ export const generateResearchProfile = async (
   url: string,
   goal: string
 ): Promise<ResearchResult> => {
+  // Extract identifier from URL if possible to help the search (e.g., 'nikhilmittalnsit')
+  const urlParts = url ? url.replace(/\/$/, "").split('/') : [];
+  const urlIdentifier = urlParts.length > 0 ? urlParts[urlParts.length - 1] : "";
+
   const prompt = `
-You are an Elite Strategic Intelligence Analyst. Your task is to provide a high-signal, evidence-based tactical briefing for a meeting with ${name}.
+[MISSION: CRITICAL TACTICAL RESEARCH]
+TARGET_NAME: ${name}
+TARGET_URL: ${url || "NOT PROVIDED"}
+URL_IDENTIFIER_ANCHOR: ${urlIdentifier}
+USER_GOAL: ${goal}
 
-TARGET: ${name}
-URL: ${url || "Search for verified professional footprint"}
-USER'S MEETING GOAL: ${goal}
-
-### 🛑 STRICT INTEGRITY GUARDRAILS:
-1. **NO METADATA READING**: Do NOT deduce personality from URL IDs or profile timestamps.
-2. **EVIDENCE-ONLY PSYCHOMETRICS**: Categorize behavior into "buckets" ONLY if you can cite specific evidence.
-3. **GOAL ALIGNMENT**: Every insight must help achieve: ${goal}.
+[RESEARCH & VERIFICATION PROTOCOL]
+1. **SEARCH**: Perform a deep search using Google Search. Focus on finding the profile associated with the URL_IDENTIFIER_ANCHOR ("${urlIdentifier}").
+2. **MATCHING**: You MUST confirm that the person's professional background (e.g., Education from NSIT/NSUT, specific companies) aligns with the specific identifier provided in the URL.
+3. **DO NOT SUMMARIZE GENERIC NAMES**: If multiple people exist with the name "${name}", ignore them all except the one matching "${urlIdentifier}". 
+4. **IDENTITY SNAPSHOT**: Your report MUST begin with a "Verified Identity Snapshot" to confirm to the user you have the correct person.
+5. **EXIT CLAUSE**: If you cannot find high-confidence data matching the specific identifier "${urlIdentifier}", you MUST output: "IDENTITY MISMATCH: Could not verify identity for identifier ${urlIdentifier}."
 
 ### REQUIRED REPORT STRUCTURE (Markdown):
 
 # Tactical Briefing: ${name}
 
-## 🛡️ Intelligence Verification
-**Data Confidence:** [High / Medium / Low]
-**Reasoning:** (One concise line explaining the search depth.)
+## 🛡️ Verified Identity Snapshot
+*   **Current Role:** [Found Role]
+*   **Organization:** [Found Organization]
+*   **Key Education Anchor:** [e.g. NSIT / NSUT / University Name]
+*   **Data Confidence:** [High / Medium / Low]
+*   **Verification Note:** (Briefly explain how you confirmed this is the correct "${urlIdentifier}")
 
 ## 📜 Professional Narrative
-(One high-signal paragraph synthesizing their career focus. Max 4 sentences.)
+(A high-signal synthesis of their career trajectory based ONLY on verified search results.)
 
 ## 🛠️ Competency & Leverage Matrix
 
-**CRITICAL: ENSURE AT LEAST TWO BLANK LINES BEFORE STARTING THE TABLE BELOW.**
-
-
-| Competency Area | Verified Proof | How to Leverage for "${goal}" | Conversation Opener/Hint |
+| Competency Area | Verified Proof | Strategic Leverage for "${goal}" | Recommended Opener |
 | :--- | :--- | :--- | :--- |
-| [Skill] | [Evidence] | [Strategy] | "[Exact Phrasing]" |
-
+| [Skill] | [Evidence] | [Strategy] | "[Phrasing]" |
 
 ## 🧠 Psychographic Analysis
-(Provide 4-5 distinct "Buckets" based on their public footprint. Use the exact format below for each.)
-
 ### Bucket: [Profile Name]
-*   **The Essence:** (A one-line definition in simple, plain language explaining what this profile name means)
-*   **Proof Point:** (Specific evidence from their history/published work)
-*   **Operational Mindset:** (How they process decisions in this state)
+*   **The Essence:** (Definition of their professional persona)
+*   **Proof Point:** (Specific evidence from their public footprint)
+*   **Operational Mindset:** (How they process decisions)
 
 ## 📔 Interaction Playbook
 ### Tactical Protocol
-*   **[SPEECH STYLE]:** (Direct? Collaborative? Abstract?)
-*   **[ENERGY DRIVERS]:** (What topics/keywords excite them? Cite sources.)
-*   **[FRICTION POINTS]:** (What they dislike or find annoying.)
-*   **[EXPECTED BEHAVIOR]:** (Predicted interaction style for this meeting.)
+*   **[SPEECH STYLE]:** (Based on writing/interviews found)
+*   **[ENERGY DRIVERS]:** (Topics of high engagement)
+*   **[FRICTION POINTS]:** (Avoid these topics)
+*   **[EXPECTED BEHAVIOR]:** (Interaction style prediction)
 
 ## 🎯 Executive Recommendation
-One high-impact piece of advice.
+One high-impact piece of advice tailored to "${goal}".
 `;
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-3-pro-preview',
+      model: 'gemini-3-flash-preview',
       contents: prompt,
       config: {
+        systemInstruction: `You are a World-Class Strategic Intelligence Analyst. 
+        Accuracy is your only metric for success. 
+        You MUST use the Google Search tool to anchor identity. 
+        If a URL identifier like "${urlIdentifier}" is provided, you treat it as the absolute anchor for identity. 
+        Ignore generic information about common names. 
+        You extract tactical insights from real-time search data, never from internal training hallucinations.`,
         tools: [{ googleSearch: {} }],
-        thinkingConfig: { thinkingBudget: 8000 }
+        thinkingConfig: { thinkingLevel: ThinkingLevel.LOW }
       },
     });
 
     const markdownContent = response.text || "Strategic audit failed to generate.";
+    
+    if (markdownContent.includes("IDENTITY MISMATCH") || markdownContent.includes("INSUFFICIENT DATA")) {
+       throw new Error(`Identity verification failed. Could not find a high-confidence public match for the specific profile: ${urlIdentifier}`);
+    }
+
     const sources: { uri: string; title: string }[] = [];
     const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks;
 
@@ -84,8 +98,8 @@ One high-impact piece of advice.
     }
 
     return { markdownContent, sources };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Gemini API Error:", error);
-    throw new Error("Strategic research failed. Ensure the target has a public footprint.");
+    throw new Error(error.message || "Strategic research failed.");
   }
 };

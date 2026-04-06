@@ -1,7 +1,6 @@
 
 import React from "react";
 import { FormState } from "../types";
-// Added missing Sparkles and Loader2 icons to the import
 import { Search, Link as LinkIcon, Target, User, Sparkles, Loader2 } from "lucide-react";
 
 interface InputFormProps {
@@ -48,15 +47,18 @@ export const InputForm: React.FC<InputFormProps> = ({
               id="personName"
               value={formState.personName}
               onChange={handleChange}
-              placeholder="e.g. Sarah Jenkins"
+              placeholder="e.g. Nikhil Mittal"
               className="block w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 focus:bg-white transition-all text-slate-900 font-medium"
             />
           </div>
+          <p className="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-widest">
+            Tip: Include current company if the name is common.
+          </p>
         </div>
 
         <div>
           <label htmlFor="linkedinUrl" className="block text-sm font-black text-slate-800 uppercase tracking-wider mb-3">
-            Public Profile Link <span className="text-slate-400 font-normal lowercase italic">(optional)</span>
+            Public Profile Link <span className="text-slate-400 font-normal lowercase italic">(highly recommended)</span>
           </label>
           <div className="relative group">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -68,10 +70,13 @@ export const InputForm: React.FC<InputFormProps> = ({
               id="linkedinUrl"
               value={formState.linkedinUrl}
               onChange={handleChange}
-              placeholder="LinkedIn, Portfolio, or Company URL"
+              placeholder="https://www.linkedin.com/in/..."
               className="block w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 focus:bg-white transition-all text-slate-900 font-medium"
             />
           </div>
+          <p className="text-[10px] text-indigo-500 mt-2 font-bold uppercase tracking-widest">
+            Crucial for accurate identity verification.
+          </p>
         </div>
 
         <div>
@@ -88,7 +93,7 @@ export const InputForm: React.FC<InputFormProps> = ({
               rows={4}
               value={formState.researchGoal}
               onChange={handleChange}
-              placeholder="e.g. Closing a sale, pitching a new product, or an informational interview..."
+              placeholder="e.g. Discussing a potential partnership in the AI space..."
               className="block w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 focus:bg-white transition-all text-slate-900 font-medium resize-none"
             />
           </div>
