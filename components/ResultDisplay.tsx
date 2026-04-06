@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import html2pdf from "html2pdf.js";
 import { ResearchResult } from "../types";
 import { ExternalLink, Download, Copy, BrainCircuit, Activity, ShieldCheck, Zap, FileText, BookOpen, Quote, ChevronRight, MessageSquare, Flame, Ban, Target, Sparkles } from "lucide-react";
 
@@ -10,18 +11,38 @@ interface ResultDisplayProps {
 }
 
 export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) => {
+  const [copyFeedback, setCopyFeedback] = useState(false);
+
   const handleCopy = () => {
     try {
       navigator.clipboard.writeText(result.markdownContent);
-      alert("Tactical briefing copied to clipboard!");
+      setCopyFeedback(true);
+      setTimeout(() => setCopyFeedback(false), 2000);
     } catch (err) {
       console.error("Copy failed", err);
     }
   };
 
   const handleExportPDF = () => {
-    // Explicitly call print. The index.html CSS handles the "PDF" formatting
-    window.print();
+    const element = document.querySelector(".print-container");
+    if (!element) return;
+
+    const opt = {
+      margin: [10, 10],
+      filename: `Tactical_Briefing_${result.markdownContent.split('\n')[0].replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { 
+        scale: 2, 
+        useCORS: true,
+        logging: false,
+        letterRendering: true
+      },
+      jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+
+    // Use html2pdf to generate the PDF
+    html2pdf().set(opt).from(element).save();
   };
 
   const handleDownloadMD = () => {
@@ -66,10 +87,13 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
           <button
             type="button"
             onClick={handleCopy}
-            className="p-2.5 text-slate-400 hover:text-white hover:bg-slate-800 rounded-xl transition-colors"
+            className={`p-2.5 rounded-xl transition-all flex items-center gap-2 ${
+              copyFeedback ? "text-emerald-400 bg-emerald-400/10" : "text-slate-400 hover:text-white hover:bg-slate-800"
+            }`}
             title="Copy Text"
           >
             <Copy className="w-4 h-4" />
+            {copyFeedback && <span className="text-[9px] font-black uppercase tracking-widest">Copied</span>}
           </button>
           <button
             type="button"
