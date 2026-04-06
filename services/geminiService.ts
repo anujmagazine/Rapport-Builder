@@ -53,17 +53,19 @@ USER_GOAL: ${goal}
 *   **Proof Point:** (Specific evidence from their public footprint)
 *   **Operational Mindset:** (How they process decisions)
 
-## 📔 Interaction Playbook
+## 📔 Interaction Playbook: Strategic Engagement
 ### Tactical Protocol
-*   **[SPEECH STYLE]:** (Based on writing/interviews found)
-*   **[ENERGY DRIVERS]:** (Topics of high engagement)
-*   **[FRICTION POINTS]:** (Avoid these topics)
-*   **[EXPECTED BEHAVIOR]:** (Interaction style prediction)
+*   **[SPEECH STYLE]:** (Deep analysis of their communication style—e.g., "Direct and data-driven," "Visionary and metaphorical." Provide a specific example of a phrase or tone they use in public appearances or writing.)
+*   **[ENERGY DRIVERS]:** (Identify 2-3 specific topics that trigger high engagement. For each, provide a "Bridge Question" you can use to pivot the conversation toward these topics.)
+*   **[FRICTION POINTS]:** (Identify subtle triggers that cause withdrawal or defensiveness. Explain the psychological root of these triggers based on their career path.)
+*   **[EXPECTED BEHAVIOR]:** (Predict their reaction to common meeting scenarios—e.g., "Will likely interrupt to ask for data," "Prefers to listen for 10 minutes before speaking.")
 
-## ⚠️ Critical Avoidance: What Not To Do
-### Tactical "No-Go" Zones
-*   **[AVOIDANCE]:** (Specific action/topic to avoid)
-*   **[REASONING]:** (Why this would be counter-productive for this specific person)
+## ⚠️ Critical Avoidance: Tactical "No-Go" Zones
+### High-Stakes Avoidance Matrix
+*   **[AVOIDANCE]:** (Specific action, topic, or framing to avoid. Be extremely specific—e.g., "Do not mention their tenure at [Company X] as a 'learning experience'.")
+*   **[REASONING]:** (Deep psychological or professional reasoning. Why is this a landmine? Connect it to a specific event or public sentiment they've expressed.)
+*   **[CONSEQUENCE]:** (What happens if you fail this? e.g., "Immediate loss of credibility," "Triggers a defensive pivot to technicalities.")
+*   **[REPLACEMENT STRATEGY]:** (What to do instead to achieve the same goal without the friction.)
 
 ## 🎯 Executive Recommendation
 One high-impact piece of advice tailored to "${goal}".

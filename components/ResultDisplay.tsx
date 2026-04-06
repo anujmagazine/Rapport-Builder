@@ -215,6 +215,8 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                 
                 const isAvoidanceItem = text.includes("[AVOIDANCE]");
                 const isReasoningItem = text.includes("[REASONING]");
+                const isConsequenceItem = text.includes("[CONSEQUENCE]");
+                const isReplacementItem = text.includes("[REPLACEMENT STRATEGY]");
                 
                 const isEssence = text.includes("The Essence:");
                 const isProof = text.includes("Proof Point:");
@@ -283,23 +285,43 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                   );
                 }
 
-                if (isAvoidanceItem || isReasoningItem) {
+                if (isAvoidanceItem || isReasoningItem || isConsequenceItem || isReplacementItem) {
                   return (
                     <div className={`p-6 rounded-2xl mb-4 flex items-start gap-4 break-inside-avoid border-2 ${
-                      isAvoidanceItem ? "bg-rose-50 border-rose-200" : "bg-slate-50 border-slate-200"
+                      isAvoidanceItem ? "bg-rose-50 border-rose-200" : 
+                      isReplacementItem ? "bg-emerald-50 border-emerald-100" :
+                      isConsequenceItem ? "bg-slate-900 text-white border-slate-900" :
+                      "bg-slate-50 border-slate-200"
                     }`}>
                       <div className={`p-2 rounded-lg flex-shrink-0 ${
-                        isAvoidanceItem ? "bg-rose-600 text-white" : "bg-slate-600 text-white"
+                        isAvoidanceItem ? "bg-rose-600 text-white" : 
+                        isReplacementItem ? "bg-emerald-600 text-white" :
+                        isConsequenceItem ? "bg-rose-500 text-white" :
+                        "bg-slate-600 text-white"
                       }`}>
-                        {isAvoidanceItem ? <Ban className="w-4 h-4" /> : <Activity className="w-4 h-4" />}
+                        {isAvoidanceItem && <Ban className="w-4 h-4" />}
+                        {isReasoningItem && <Activity className="w-4 h-4" />}
+                        {isConsequenceItem && <AlertCircle className="w-4 h-4" />}
+                        {isReplacementItem && <Zap className="w-4 h-4" />}
                       </div>
                       <div>
                         <span className={`text-[9px] font-black uppercase tracking-widest mb-1 block ${
-                          isAvoidanceItem ? "text-rose-600" : "text-slate-500"
+                          isAvoidanceItem ? "text-rose-600" : 
+                          isReplacementItem ? "text-emerald-600" :
+                          isConsequenceItem ? "text-slate-400" :
+                          "text-slate-500"
                         }`}>
-                          {isAvoidanceItem ? "Tactical Avoidance" : "Strategic Reasoning"}
+                          {isAvoidanceItem ? "Tactical Avoidance" : 
+                           isReasoningItem ? "Strategic Reasoning" : 
+                           isConsequenceItem ? "Potential Consequence" :
+                           "Replacement Strategy"}
                         </span>
-                        <div className={`font-bold ${isAvoidanceItem ? "text-rose-900 text-lg" : "text-slate-700 text-sm italic"}`}>
+                        <div className={`font-bold ${
+                          isAvoidanceItem ? "text-rose-900 text-lg" : 
+                          isConsequenceItem ? "text-white text-sm" :
+                          isReplacementItem ? "text-emerald-900 text-sm" :
+                          "text-slate-700 text-sm italic"
+                        }`}>
                           {text.split("]:")[1]?.trim() || text}
                         </div>
                       </div>
