@@ -135,6 +135,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                 const isBuckets = text.includes("psychographic") || text.includes("analysis");
                 const isPlaybook = text.includes("playbook") || text.includes("protocol");
                 const isMatrix = text.includes("matrix") || text.includes("competency");
+                const isAvoidance = text.includes("avoidance") || text.includes("what not to do");
                 
                 return (
                   <h2 
@@ -143,6 +144,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                       isBuckets ? "bg-indigo-900 text-white border-indigo-900" :
                       isPlaybook ? "bg-slate-900 text-white border-slate-900" :
                       isMatrix ? "bg-indigo-50 text-indigo-900 border-indigo-100" :
+                      isAvoidance ? "bg-rose-900 text-white border-rose-900" :
                       "bg-slate-50 text-slate-900 border-slate-200"
                     }`} 
                     {...props}
@@ -152,6 +154,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                     {isBuckets && <BrainCircuit className="w-6 h-6 no-print text-indigo-300" />}
                     {isPlaybook && <BookOpen className="w-6 h-6 no-print text-amber-500" />}
                     {isMatrix && <Zap className="w-6 h-6 no-print text-indigo-400" />}
+                    {isAvoidance && <Ban className="w-6 h-6 no-print text-rose-300" />}
                     {children}
                   </h2>
                 );
@@ -209,6 +212,9 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                 const isEnergy = text.includes("[ENERGY DRIVERS]");
                 const isFriction = text.includes("[FRICTION POINTS]");
                 const isExpected = text.includes("[EXPECTED BEHAVIOR]");
+                
+                const isAvoidanceItem = text.includes("[AVOIDANCE]");
+                const isReasoningItem = text.includes("[REASONING]");
                 
                 const isEssence = text.includes("The Essence:");
                 const isProof = text.includes("Proof Point:");
@@ -270,6 +276,30 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ result, onBack }) 
                           {isSpeech ? "Communication Mode" : isEnergy ? "High-Signal Triggers" : isFriction ? "Hazard Warnings" : "Predicted Response"}
                         </span>
                         <div className="text-lg font-bold text-slate-900 leading-snug">
+                          {text.split("]:")[1]?.trim() || text}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+
+                if (isAvoidanceItem || isReasoningItem) {
+                  return (
+                    <div className={`p-6 rounded-2xl mb-4 flex items-start gap-4 break-inside-avoid border-2 ${
+                      isAvoidanceItem ? "bg-rose-50 border-rose-200" : "bg-slate-50 border-slate-200"
+                    }`}>
+                      <div className={`p-2 rounded-lg flex-shrink-0 ${
+                        isAvoidanceItem ? "bg-rose-600 text-white" : "bg-slate-600 text-white"
+                      }`}>
+                        {isAvoidanceItem ? <Ban className="w-4 h-4" /> : <Activity className="w-4 h-4" />}
+                      </div>
+                      <div>
+                        <span className={`text-[9px] font-black uppercase tracking-widest mb-1 block ${
+                          isAvoidanceItem ? "text-rose-600" : "text-slate-500"
+                        }`}>
+                          {isAvoidanceItem ? "Tactical Avoidance" : "Strategic Reasoning"}
+                        </span>
+                        <div className={`font-bold ${isAvoidanceItem ? "text-rose-900 text-lg" : "text-slate-700 text-sm italic"}`}>
                           {text.split("]:")[1]?.trim() || text}
                         </div>
                       </div>

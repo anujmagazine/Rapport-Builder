@@ -60,6 +60,11 @@ USER_GOAL: ${goal}
 *   **[FRICTION POINTS]:** (Avoid these topics)
 *   **[EXPECTED BEHAVIOR]:** (Interaction style prediction)
 
+## ⚠️ Critical Avoidance: What Not To Do
+### Tactical "No-Go" Zones
+*   **[AVOIDANCE]:** (Specific action/topic to avoid)
+*   **[REASONING]:** (Why this would be counter-productive for this specific person)
+
 ## 🎯 Executive Recommendation
 One high-impact piece of advice tailored to "${goal}".
 `;
