@@ -2,7 +2,7 @@
 import { GoogleGenAI, ThinkingLevel } from "@google/genai";
 import { ResearchResult } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || "" });
 
 export const generateResearchProfile = async (
   name: string,
